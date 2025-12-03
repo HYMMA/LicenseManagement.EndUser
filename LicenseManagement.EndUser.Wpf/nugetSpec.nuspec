@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+	<metadata minClientVersion="2.5">
+		<id>Hymma.Lm.EndUser.Wpf</id>
+		<!-- will be replace by msbuild target -->
+		<version>0.0.0.0</version>
+		<authors>HYMMA</authors>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<description>WPF package for license-management.com to be used with on end user machines.</description>
+		<releaseNotes>Updates</releaseNotes>
+		<icon>nugetIcon.png</icon>
+		<projectUrl>https://github.com/HYMMA/Hymma.Solidworks</projectUrl>
+		<tags>hymma license-management.com</tags>
+		<dependencies>
+			<group targetFramework=".NETFramework4.8.1">
+				<dependency id="Hymma.Lm.EndUser"
+							version="1.2.0"></dependency>
+			</group>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\nugetIcon.png" target=""/>
+		<file src="bin\Release\*.xml" target="lib\net481"/>
+		<file src="bin\Release\*.pdb" target="lib\net481"/>
+		<file src="bin\Release\*.config" target="lib\net481"/>
+		<file src="bin\Release\*.exe" target="lib\net481"/>
+		<file src="bin\Release\*.dll" target="lib\net481" />
+		<file src="bin\Release\Assets\*.*" target="lib\net481\Assets" />
+	</files>
+</package>

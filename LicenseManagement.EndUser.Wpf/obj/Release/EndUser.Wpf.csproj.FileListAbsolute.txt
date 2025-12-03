@@ -1,0 +1,3 @@
+C:\Users\Ashra\source\repos\CadshiftForSolidworks\Hymma.CadShift.Solidworks\bin\Release\Hymma.Lm.EndUser.Wpf.exe.config
+C:\Users\Ashra\source\repos\CadshiftForSolidworks\Hymma.CadShift.Solidworks\bin\Release\Hymma.Lm.EndUser.Wpf.exe
+C:\Users\Ashra\source\repos\CadshiftForSolidworks\Hymma.CadShift.Solidworks\bin\Release\Hymma.Lm.EndUser.Wpf.pdb

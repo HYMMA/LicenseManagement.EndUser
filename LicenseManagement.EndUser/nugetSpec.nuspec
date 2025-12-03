@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+	<metadata minClientVersion="2.5">
+		<id>Hymma.Lm.EndUser</id>
+		<!-- will be replace by msbuild target -->
+		<version>0.0.0.0</version>
+		<authors>HYMMA</authors>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<description>End user library for license-management.com to be used with windows form applications.</description>
+		<releaseNotes>Updates</releaseNotes>
+		<icon>nugetIcon.png</icon>
+		<projectUrl>https://github.com/HYMMA/Hymma.Solidworks</projectUrl>
+		<tags>hymma license-management.com</tags>
+		<dependencies>
+			<group targetFramework=".NETFramework4.8.1"/>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\nugetIcon.png" target=""/>
+		<!--<file src="build\*.targets" target="build"/>-->
+		<!--<file src="build\Hymma.BuildTasks.dll" target="build"/>-->
+		<file src="bin\Release\*.xml" target="lib\net481"/>
+		<file src="bin\Release\*.pdb" target="lib\net481"/>
+		<file src="bin\Release\*.dll" target="lib\net481" />
+	</files>
+</package>

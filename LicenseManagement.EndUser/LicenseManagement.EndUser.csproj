@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE18BD8E-BFFE-4BA1-8E65-F4B0ACCB54BF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LicenseManagement.EndUser</RootNamespace>
+    <AssemblyName>LicenseManagement.EndUser</AssemblyName>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>HymmaLm.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DeviceId, Version=6.9.0.0, Culture=neutral, PublicKeyToken=f755c371b5c59c52, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeviceId.6.9.0\lib\net40\DeviceId.dll</HintPath>
+    </Reference>
+    <Reference Include="DeviceId.Windows, Version=6.9.0.0, Culture=neutral, PublicKeyToken=f755c371b5c59c52, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeviceId.Windows.6.9.0\lib\net40\DeviceId.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="DeviceId.Windows.Wmi, Version=6.9.0.0, Culture=neutral, PublicKeyToken=f755c371b5c59c52, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeviceId.Windows.Wmi.6.9.0\lib\net40\DeviceId.Windows.Wmi.dll</HintPath>
+    </Reference>
+    <Reference Include="HttpClientFactory, Version=1.0.7.0, Culture=neutral, PublicKeyToken=040d2ea61b690452, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hymma.HttpClientFactory.1.0.7\lib\net45\HttpClientFactory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.0\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.5.1\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AuthorizedRequest.cs" />
+    <Compile Include="Exceptions\CouldNotPatchLicenseWithReceiptException.cs" />
+    <Compile Include="Exceptions\ReceiptNotAvailableException.cs" />
+    <Compile Include="LicenseValidationHandler.cs" />
+    <Compile Include="License\Handlers\TimeSyncDiagnostic.cs" />
+    <Compile Include="License\Handlers\ValidLicenseHandler.cs" />
+    <Compile Include="License\Handlers\UnregisterReceiptHandler.cs" />
+    <Compile Include="Computer\EndPoint\ComputerApiEndPoint.cs" />
+    <Compile Include="Computer\Handlers\ApiGetComputerHandler.cs" />
+    <Compile Include="Computer\Handlers\ApiPostComputerHandler.cs" />
+    <Compile Include="Computer\Handlers\ComputerIdValidatorHandler.cs" />
+    <Compile Include="License\Handlers\InvalidTrialHandler.cs" />
+    <Compile Include="License\LicenseStatus.cs" />
+    <Compile Include="Models\VendorModel.cs" />
+    <Compile Include="PublisherPreferences.cs" />
+    <Compile Include="License\Handlers\ReceiptUnregisteredHandler.cs" />
+    <Compile Include="Registers\ComputerRegister.cs" />
+    <Compile Include="Computer\UniqueIdentifiers\ComputerId.cs" />
+    <Compile Include="ErrorHandler.cs" />
+    <Compile Include="Exceptions\ComputerNameException.cs" />
+    <Compile Include="Exceptions\CouldNotReadComputerIdException.cs" />
+    <Compile Include="Exceptions\CouldNotReadLicenseFromDiskException.cs" />
+    <Compile Include="Exceptions\CouldNotUnregisterComputerException.cs" />
+    <Compile Include="Exceptions\CouldNotWriteComputerIdException.cs" />
+    <Compile Include="Exceptions\CouldNotWriteLicenseOnDiskException.cs" />
+    <Compile Include="Exceptions\ApiException.cs" />
+    <Compile Include="Exceptions\ComputerOfflineException.cs" />
+    <Compile Include="Exceptions\LicenseExpiredException.cs" />
+    <Compile Include="Exceptions\NotUnregisteredException.cs" />
+    <Compile Include="Exceptions\ProductNameException.cs" />
+    <Compile Include="Exceptions\ReceiptCodeException.cs" />
+    <Compile Include="Exceptions\ReceiptExpiredException.cs" />
+    <Compile Include="LicHandlingContext.cs" />
+    <Compile Include="HandlerStrategy.cs" />
+    <Compile Include="LicenseHandlingInstall.cs" />
+    <Compile Include="LicenseHandlingLaunch.cs" />
+    <Compile Include="License\EndPoint\LicenseApiEndPoint.cs" />
+    <Compile Include="License\Handlers\ApiGetLicenseHandler.cs" />
+    <Compile Include="License\Handlers\ApiPostLicenseHandler.cs" />
+    <Compile Include="License\Handlers\PatchLicenseWithReceiptHandler.cs" />
+    <Compile Include="License\Handlers\ExpiredLicenseHandler.cs" />
+    <Compile Include="License\Handlers\LicenseStatusHandler.cs" />
+    <Compile Include="License\Handlers\LicenseParsingHandler.cs" />
+    <Compile Include="Signature\EndPoint\SignatureApiEndPoint.cs" />
+    <Compile Include="Signature\Handlers\LicenseSignatureValidationHandler.cs" />
+    <Compile Include="License\Handlers\LastLicenseHandler.cs" />
+    <Compile Include="Registers\LicenseRegister.cs" />
+    <Compile Include="Models\ComputerModel.cs" />
+    <Compile Include="Models\DbModelWithDate.cs" />
+    <Compile Include="Models\LicenseModel.cs" />
+    <Compile Include="Models\PatchLicenseModel.cs" />
+    <Compile Include="Models\PostLicenseModel.cs" />
+    <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\ReceiptModel.cs" />
+    <Compile Include="Product\EndPoint\ProductApiEndPoint.cs" />
+    <Compile Include="Product\Handlers\ApiGetProductHandler.cs" />
+    <Compile Include="Product\Handlers\ProductNameValidatorHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Receipt\Handlers\ReceiptExpiredHandler.cs" />
+    <Compile Include="LicenseHandlingStrategy.cs" />
+    <Compile Include="Time\EndPoint\DateTimeApiEndPoint.cs" />
+    <Compile Include="LicenseHandlingUninstall.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Time\NtpConnection.cs" />
+    <Compile Include="Utilities\HttpResponseMessageExtensions.cs" />
+    <Compile Include="Utilities\MainRegistryKeyInHkcu.cs" />
+    <Compile Include="Utilities\MainRegistryKeyInHKLM.cs" />
+    <Compile Include="Utilities\PathHelper.cs" />
+    <Compile Include="Utilities\UriExtensions.cs" />
+    <Compile Include="WebApiClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="nugetSpec.nuspec" />
+    <None Include="HymmaLm.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MIT-LICENSE.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\Hymma.Packing.targets" />
+</Project>

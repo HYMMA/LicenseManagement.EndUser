@@ -1,0 +1,108 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core.Test\\ClientSide.Core.Test.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core.Test\\ClientSide.Core.Test.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core.Test\\ClientSide.Core.Test.csproj",
+        "projectName": "ClientSide.Core.Test",
+        "projectPath": "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core.Test\\ClientSide.Core.Test.csproj",
+        "packagesPath": "C:\\Users\\Ashra\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core.Test\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Ashra\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net481"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Users\\Ashra\\source\\repos\\LocalNugets": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net481": {
+            "targetAlias": "net481",
+            "projectReferences": {
+              "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core\\Client.csproj": {
+                "projectPath": "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core\\Client.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net481": {
+          "targetAlias": "net481",
+          "dependencies": {
+            "Microsoft.AspNet.WebApi.Client": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Extensions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.9.0, )"
+            },
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.3, )",
+              "autoReferenced": true
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.7.0, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.5.7, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.103\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core\\Client.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core\\Client.csproj",
+        "projectName": "Client",
+        "projectPath": "C:\\Users\\Ashra\\source\\repos\\HymmaLicenseManagement\\ClientSide.Core\\Client.csproj",
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    }
+  }
+}
