@@ -23,7 +23,7 @@ jobs:
       run: nuget restore LicenseManagement.EndUser/LicenseManagement.EndUser.csproj -PackagesDirectory packages
 
     - name: Build
-      run: msbuild LicenseManagement.EndUser/LicenseManagement.EndUser.csproj /p:Configuration=Release /p:Platform="Any CPU"
+      run: msbuild LicenseManagement.EndUser/LicenseManagement.EndUser.csproj /p:Configuration=Release /p:Platform=AnyCPU
 
     - name: Run Tests
       run: |
