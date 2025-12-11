@@ -9,7 +9,6 @@
 		<license type="expression">MIT</license>
 		<description>End-user SDK for license-management.com platform. Provides license validation, trial management, and activation handling for Windows desktop applications.</description>
 		<releaseNotes>Initial public release with full license lifecycle management.</releaseNotes>
-		<icon>nugetIcon.png</icon>
 		<projectUrl>https://github.com/HYMMA/LicenseManagement.EndUser</projectUrl>
 		<repository type="git" url="https://github.com/HYMMA/LicenseManagement.EndUser.git" />
 		<readme>README.md</readme>
@@ -27,7 +26,6 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\nugetIcon.png" target="" />
 		<file src="..\README.md" target="" />
 		<file src="bin\Release\LicenseManagement.EndUser.dll" target="lib\net481" />
 		<file src="bin\Release\LicenseManagement.EndUser.pdb" target="lib\net481" />
