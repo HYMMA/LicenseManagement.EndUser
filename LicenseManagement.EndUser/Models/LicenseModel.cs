@@ -1,5 +1,6 @@
 ﻿using Hymma.Lm.EndUser.License;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -24,9 +25,14 @@ namespace Hymma.Lm.EndUser.Models{    [XmlType("License")]
         }
 
         /// <summary>
-        /// a safety threshold to stop dodgy users manipulating the trial days value in the App.Config, also allows you increase the trial days 
+        /// when the trial period ends for this license
         /// </summary>
-        public int MaxTrialDays { get; set; }
+        public DateTime TrialEndDate { get; set; }
+
+        /// <summary>
+        /// key-value metadata attached to this license by the publisher
+        /// </summary>
+        public Dictionary<string, string>? Metadata { get; set; }
 
         public DateTime? Expires
         {

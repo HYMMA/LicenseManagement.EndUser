@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package >
+<package>
 	<metadata minClientVersion="2.5">
 		<id>Hymma.Lm.EndUser</id>
-		<!-- will be replace by msbuild target -->
-		<version>0.0.0.0</version>
+		<version>1.0.0</version>
 		<authors>HYMMA</authors>
+		<owners>HYMMA</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">MIT</license>
-		<description>End user library for license-management.com to be used with windows form applications.</description>
-		<releaseNotes>Updates</releaseNotes>
+		<description>End-user SDK for license-management.com platform. Provides license validation, trial management, and activation handling for Windows desktop applications.</description>
+		<releaseNotes>Initial public release with full license lifecycle management.</releaseNotes>
 		<icon>nugetIcon.png</icon>
-		<projectUrl>https://github.com/HYMMA/Hymma.Solidworks</projectUrl>
-		<tags>hymma license-management.com</tags>
+		<projectUrl>https://github.com/HYMMA/LicenseManagement.EndUser</projectUrl>
+		<repository type="git" url="https://github.com/HYMMA/LicenseManagement.EndUser.git" />
+		<readme>README.md</readme>
+		<tags>license licensing software-licensing trial-management activation desktop-app hymma license-management</tags>
 		<dependencies>
-			<group targetFramework=".NETFramework4.8.1"/>
+			<group targetFramework=".NETFramework4.8.1">
+				<dependency id="DeviceId" version="6.9.0" />
+				<dependency id="DeviceId.Windows" version="6.9.0" />
+				<dependency id="DeviceId.Windows.Wmi" version="6.9.0" />
+				<dependency id="Hymma.HttpClientFactory" version="1.0.7" />
+				<dependency id="Newtonsoft.Json" version="13.0.3" />
+				<dependency id="System.Memory" version="4.5.0" />
+				<dependency id="System.Threading.Tasks.Extensions" version="4.5.2" />
+			</group>
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\nugetIcon.png" target=""/>
-		<!--<file src="build\*.targets" target="build"/>-->
-		<!--<file src="build\Hymma.BuildTasks.dll" target="build"/>-->
-		<file src="bin\Release\*.xml" target="lib\net481"/>
-		<file src="bin\Release\*.pdb" target="lib\net481"/>
-		<file src="bin\Release\*.dll" target="lib\net481" />
+		<file src="..\nugetIcon.png" target="" />
+		<file src="..\README.md" target="" />
+		<file src="bin\Release\LicenseManagement.EndUser.dll" target="lib\net481" />
+		<file src="bin\Release\LicenseManagement.EndUser.pdb" target="lib\net481" />
+		<file src="bin\Release\LicenseManagement.EndUser.xml" target="lib\net481" />
 	</files>
 </package>

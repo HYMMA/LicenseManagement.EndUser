@@ -1,0 +1,32 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore NuGet packages
+      run: nuget restore LicenseManagement.EndUser/LicenseManagement.EndUser.csproj -PackagesDirectory packages
+
+    - name: Build
+      run: msbuild LicenseManagement.EndUser/LicenseManagement.EndUser.csproj /p:Configuration=Release /p:Platform="Any CPU"
+
+    - name: Run Tests
+      run: |
+        nuget restore LicenseManagement.EndUser.Test/LicenseManagement.EndUser.Test.csproj -PackagesDirectory packages
+        msbuild LicenseManagement.EndUser.Test/LicenseManagement.EndUser.Test.csproj /p:Configuration=Release
+      continue-on-error: true

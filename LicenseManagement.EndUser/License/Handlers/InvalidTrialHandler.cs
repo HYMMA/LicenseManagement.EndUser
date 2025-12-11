@@ -1,4 +1,4 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
+using Hymma.Lm.EndUser.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -6,21 +6,25 @@ namespace Hymma.Lm.EndUser.License.Handlers
 {
     internal class InvalidTrialHandler : LicenseValidationHandler
     {
-
-        //makes sure we don't go through a loop next time we are here. sets the context.IsLicenseFreshOurOfServer to true 
+        //makes sure we don't go through a loop next time we are here. sets the context.IsLicenseFreshOurOfServer to true
         private void GetLicenseFileFromServer() =>
             SetNext(new ApiGetLicenseHandler());
 
-        //if extra value has been granted to the trial
-        //sometimes the publisher might decide to grant extra trial period after the initial value is over
-        //this is a marketing strategy like snagit does.
+        // Check if the server has extended the trial by comparing TrialEndDate before and after refetch
         private bool TrialExtended(LicHandlingContext context)
         {
-            var beforeEvent = context.PublisherPreferences.TrialDays;
+            var trialEndDateBefore = context.LicenseModel.TrialEndDate;
 
-            //allow the publisher to update the value 
+            // Notify the publisher that trial has ended - they may trigger a server-side extension
             context.RaiseOnTrialEnded();
-            return context.PublisherPreferences.TrialDays > beforeEvent;
+
+            // If we have fresh data from server, check if TrialEndDate was extended
+            if (context.IsLicenseFreshOutOfServer)
+            {
+                return context.LicenseModel.TrialEndDate > trialEndDateBefore;
+            }
+
+            return false;
         }
 
         void SetNextHandler(LicHandlingContext context)

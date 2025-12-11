@@ -17,11 +17,21 @@ namespace Hymma.Lm.EndUser.License.Handlers
                     SetNext(new ApiGetLicenseHandler());
         private string GetApiExceptionMsg(LicHandlingContext context) =>
                 $"Could not register license for computer {context.LicenseModel.Computer.MacAddress} with Id {context.LicenseModel.Computer.Id} and product {context.LicenseModel.Product.Name} with Id {context.LicenseModel.Product.Id}";
-        private PostLicenseModel GetModel(LicHandlingContext context) => new PostLicenseModel
+        private PostLicenseModel GetModel(LicHandlingContext context)
         {
-            Computer = context.LicenseModel.Computer.Id,
-            Product = context.LicenseModel.Product.Id
-        };
+            // Fire the BeforeLicensePost event to allow publishers to attach metadata
+            var metadata = context.PublisherPreferences.OnBeforeLicensePost(
+                context.LicenseModel.Computer.MacAddress,
+                context.LicenseModel.Computer.Name,
+                context.LicenseModel.Product.Id);
+
+            return new PostLicenseModel
+            {
+                Computer = context.LicenseModel.Computer.Id,
+                Product = context.LicenseModel.Product.Id,
+                Metadata = metadata
+            };
+        }
 
         public override void HandleContext(LicHandlingContext context)
         {

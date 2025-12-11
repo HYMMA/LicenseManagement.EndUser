@@ -1,7 +1,42 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 
 namespace Hymma.Lm.EndUser
 {
+    /// <summary>
+    /// Event arguments for the BeforeLicensePost event
+    /// </summary>
+    public class BeforeLicensePostEventArgs : EventArgs
+    {
+        /// <summary>
+        /// The computer MAC address
+        /// </summary>
+        public string MacAddress { get; }
+
+        /// <summary>
+        /// The computer name
+        /// </summary>
+        public string ComputerName { get; }
+
+        /// <summary>
+        /// The product ID
+        /// </summary>
+        public string ProductId { get; }
+
+        /// <summary>
+        /// Metadata to attach to the license. Add key-value pairs here.
+        /// </summary>
+        /// <remarks>Keys and values are limited to 100 characters each</remarks>
+        public Dictionary<string, string> Metadata { get; } = new Dictionary<string, string>();
+
+        public BeforeLicensePostEventArgs(string macAddress, string computerName, string productId)
+        {
+            MacAddress = macAddress;
+            ComputerName = computerName;
+            ProductId = productId;
+        }
+    }
+
     public class PublisherPreferences
     {
         /// <summary>
@@ -16,6 +51,12 @@ namespace Hymma.Lm.EndUser
             ProductId = productId;
             ApiKey = apiKey;
         }
+
+        /// <summary>
+        /// Event fired before a license is posted to the server.
+        /// Use this to attach metadata to the license (e.g., end-user email).
+        /// </summary>
+        public event EventHandler<BeforeLicensePostEventArgs> BeforeLicensePost;
 
         /// <summary>
         /// this is the name of the product that will be provided by the assessor , or read from local license file
@@ -43,14 +84,19 @@ namespace Hymma.Lm.EndUser
         public string  ApiKey { get; }
 
         /// <summary>
-        /// the period of time a license can be valid without a receipt
-        /// </summary>
-        public uint TrialDays { get; set; }
-
-        /// <summary>
         /// the period of time a license file can be valid, server uses this number to set the <see cref="Models.LicenseModel.Expires"/>
         /// </summary>
         ///<remarks>default is 90 days</remarks>
         public uint ValidDays { get; set; } = 90;
+
+        /// <summary>
+        /// Invokes the BeforeLicensePost event and returns any metadata provided by the handler
+        /// </summary>
+        internal Dictionary<string, string> OnBeforeLicensePost(string macAddress, string computerName, string productId)
+        {
+            var args = new BeforeLicensePostEventArgs(macAddress, computerName, productId);
+            BeforeLicensePost?.Invoke(this, args);
+            return args.Metadata;
+        }
     }
 }

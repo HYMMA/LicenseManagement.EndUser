@@ -51,7 +51,7 @@ namespace Hymma.Lm.EndUser.License
         }
 
         /// <summary>
-        /// assesses a <see cref="LicenseModel"/> against certain sets of criteria 
+        /// assesses a <see cref="LicenseModel"/> against certain sets of criteria
         /// </summary>
         /// <param name="criteria">license key pieces of data will be compared to this set</param>
         /// <returns></returns>
@@ -65,7 +65,7 @@ namespace Hymma.Lm.EndUser.License
             {
                 if (_license.Updated == null)
                 {
-                    _license.Status = TrialStatus(criteria.TrialDays);
+                    _license.Status = TrialStatus();
                 }
                 else
                 {
@@ -75,14 +75,13 @@ namespace Hymma.Lm.EndUser.License
             return _license.Status;
         }
 
-        private LicenseStatusTitles TrialStatus(uint trialDays)
+        private LicenseStatusTitles TrialStatus()
         {
-            if (IsInTrialRange(trialDays))
+            // Check if still within trial period using the server-set TrialEndDate
+            if (_now < _license.TrialEndDate)
                 return LicenseStatusTitles.ValidTrial;
-
             else
                 return LicenseStatusTitles.InValidTrial;
-
         }
 
         private LicenseStatusTitles PaidLicenseStatus()
@@ -94,16 +93,6 @@ namespace Hymma.Lm.EndUser.License
                 return LicenseStatusTitles.ReceiptExpired;
             else
                 return LicenseStatusTitles.Valid;
-        }
-
-        bool IsInTrialRange(uint trialDays)
-        {
-            var trialEndDate = _license.Created?.AddDays(trialDays);
-            var maxAllowedEndDate = _license.Created?.AddDays(_license.MaxTrialDays);
-
-            //it should be between current time and maximum allowed time 
-            //max allowed time is controlled by the vendor in the website
-            return _now < trialEndDate && trialEndDate < maxAllowedEndDate;
         }
 
         bool IsExpired(LicenseModel license)
