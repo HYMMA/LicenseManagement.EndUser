@@ -52,7 +52,7 @@ namespace Hymma.Lm.EndUser.Wpf {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Hymma.Lm.EndUser.Wpf;component/window1.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/LicenseManagement.EndUser.Wpf;component/window1.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\Window1.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

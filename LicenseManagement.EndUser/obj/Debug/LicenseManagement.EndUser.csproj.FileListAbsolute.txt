@@ -1,0 +1,11 @@
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\bin\Debug\LicenseManagement.EndUser.dll.config
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\bin\Debug\LicenseManagement.EndUser.dll
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\bin\Debug\LicenseManagement.EndUser.pdb
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\obj\Debug\LicenseManagement.EndUser.csproj.AssemblyReference.cache
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\obj\Debug\LicenseManagement.EndUser.Properties.Resources.resources
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\obj\Debug\LicenseManagement.EndUser.csproj.GenerateResource.cache
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\obj\Debug\LicenseManagement.EndUser.csproj.CoreCompileInputs.cache
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\obj\Debug\LicenseM.870760B2.Up2Date
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\obj\Debug\LicenseManagement.EndUser.dll
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\obj\Debug\LicenseManagement.EndUser.pdb
+C:\Users\Ashra\source\repos\Hymma.LM\LicenseManagement.EndUser\LicenseManagement.EndUser\bin\Debug\Newtonsoft.Json.dll

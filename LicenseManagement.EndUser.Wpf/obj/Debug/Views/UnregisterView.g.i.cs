@@ -60,7 +60,7 @@ namespace Hymma.Lm.EndUser.Wpf.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Hymma.Lm.EndUser.Wpf;component/views/unregisterview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/LicenseManagement.EndUser.Wpf;component/views/unregisterview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Views\UnregisterView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

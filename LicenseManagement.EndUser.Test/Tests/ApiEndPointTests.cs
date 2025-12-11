@@ -52,9 +52,8 @@ namespace Hymma.Lm.EndUser.Test.Tests
         public async Task LicenseEndPoint_WhenPostingNewLic_ShouldReturnCreatedStatusCode()
         {
             //arrange
-            var comp = await tesetServer.RegisterRandomComputer();
-
-            var product = await tesetServer.RegisterRandomProductAsync(Data.ProductType.NoFeatures);
+            var comp = tesetServer.GetComputerWithoutLicense();
+            var product = tesetServer.GetProduct(ProductType.NoFeatures);
             var licEndPoint = new LicenseApiEndPoint(ContextManager.ApiKey);
 
             //act
@@ -84,14 +83,14 @@ namespace Hymma.Lm.EndUser.Test.Tests
         public async Task ProductEndPoint_WhenGettingAvailableProduct_ShouldReturnProduct()
         {
             //arrange
-            var expected = await tesetServer.RegisterRandomProductAsync(ProductType.OneFeature);
+            var expected = tesetServer.GetProduct(ProductType.OneFeature);
 
             //act
             var endPoint = new ProductApiEndPoint(ContextManager.ApiKey);
             var actual = await endPoint.GetProductAsync(expected.Id);
 
             //assert
-            Assert.Equal(expected, actual, (e, a) =>  e.Equals(a) );
+            Assert.Equal(expected, actual, (e, a) => e.Equals(a));
         }
 
         [Fact]

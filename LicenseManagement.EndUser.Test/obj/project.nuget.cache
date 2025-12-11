@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "OMAzeiAjWvI=",
+  "dgSpecHash": "hnbV1YjO0tw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\EndUser.Test\\EndUser.Test.csproj",
+  "projectFilePath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\LicenseManagement.EndUser\\LicenseManagement.EndUser.Test\\LicenseManagement.EndUser.Test.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Ashra\\.nuget\\packages\\bogus\\35.5.1\\bogus.35.5.1.nupkg.sha512",
     "C:\\Users\\Ashra\\.nuget\\packages\\coverlet.collector\\6.0.2\\coverlet.collector.6.0.2.nupkg.sha512",
     "C:\\Users\\Ashra\\.nuget\\packages\\microsoft.aspnet.webapi.client\\6.0.0\\microsoft.aspnet.webapi.client.6.0.0.nupkg.sha512",
     "C:\\Users\\Ashra\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",

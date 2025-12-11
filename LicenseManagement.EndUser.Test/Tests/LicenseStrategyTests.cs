@@ -231,8 +231,8 @@ namespace Hymma.Lm.EndUser.Test.Tests
         [InlineData(LicenseStatusTitles.ValidTrial)]
         public async Task OnInstall_RegardlessOfLicStatus_ShouldWriteItOnDisk(LicenseStatusTitles title)
         {
-            var product = await testServer.RegisterRandomProductAsync(ProductType.NoFeatures);
-            var computer = Computers.FromRandom();
+            var product = testServer.GetProduct(ProductType.NoFeatures);
+            var computer = Computers.ForNewLicense();
             var trial = 100U;
             var validDays = 90U;
             var context = ContextManager.GetContext(product.Id, product.Vendor.Id, trial, computer.MacAddress, computer.Name, validDays);
@@ -294,7 +294,7 @@ namespace Hymma.Lm.EndUser.Test.Tests
             var handler = new LicenseHandlingLaunch(context,
             OnCustomerMustEnterProductKey: () =>
             {
-                var newRec = testServer.RegisterRandomReceiptForProduct(lic.Product, DateTime.Now + TimeSpan.FromDays(10)).Result;
+                var newRec = testServer.GetReceiptForProduct(lic.Product);
                 return newRec.Code;
             });
 

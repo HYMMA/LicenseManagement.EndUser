@@ -1,4 +1,4 @@
-﻿using Hymma.Lm.EndUser.License;
+using Hymma.Lm.EndUser.License;
 using Hymma.Lm.EndUser.Models;
 using Hymma.Lm.EndUser.Test.Data;
 using Hymma.Lm.EndUser.Test.Utilities;
@@ -8,151 +8,192 @@ using System.Net.Http.Json;
 
 namespace Hymma.Lm.EndUser.Test.Server
 {
+    /// <summary>
+    /// Test server client for integration tests.
+    /// Uses static test data from SQL seed script instead of random Bogus data.
+    /// </summary>
     public class TestServer
     {
-        //public static 
         public TestServer()
         {
             HttpClient = HttpClientFactory.Create(new AuthenticationHandler());
             HttpClient.BaseAddress = new Uri("http://localhost:7298/api/");
+            // Reset the computer index at test server construction
+            Computers.ResetIndex();
         }
+
         public HttpClient HttpClient;
 
         /// <summary>
-        /// gets the public key
+        /// Gets the public key
         /// </summary>
-        /// <returns></returns>
         internal Task<string> GetPublicKeyAsync()
         {
             return HttpClient.GetStringAsync("PublicKey");
         }
+
         /// <summary>
-        /// returns a signed xml of the license form server
+        /// Returns a signed xml of the license from server
         /// </summary>
-        /// <param name="lic"></param>
-        /// <returns></returns>
         public async Task<string> GetSignedLicenseXmlAsync(LicenseModel lic)
             => await HttpClient.GetStringAsync($"license?computer={lic.Computer.Id}&product={lic.Product.Id}");
 
-
         /// <summary>
-        /// gets a license with valid days set to a specific number 
+        /// Gets a license with valid days set to a specific number
         /// </summary>
-        /// <param name="lic">the license that needs to be retrieved from server</param>
-        /// <param name="validDays">days a license file could be valid</param>
-        /// <returns>signed license</returns>
         public async Task<string> GetSignedLicenseXmlAsync(LicenseModel lic, int validDays)
             => await HttpClient.GetStringAsync($"license?computer={lic.Computer.Id}&product={lic.Product.Id}&validDays={validDays}");
 
+        /// <summary>
+        /// Gets a computer from the seed data that doesn't have a license yet.
+        /// Uses the NoLicenseComputers group (IDs 51-60).
+        /// </summary>
+        public ComputerModel GetComputerWithoutLicense()
+        {
+            return Computers.ForNewLicense();
+        }
+
+        /// <summary>
+        /// Gets a product from the seed data
+        /// </summary>
+        public ProductModel GetProduct(ProductType type = ProductType.ManyFeatures)
+        {
+            return Products.FromType(type);
+        }
+
+        /// <summary>
+        /// Gets an existing receipt from the seed data for a product
+        /// </summary>
+        public ReceiptModel GetReceiptForProduct(ProductModel product)
+        {
+            return Receipts.ForProduct(product);
+        }
+
+        /// <summary>
+        /// Gets an existing paid license from the seed data
+        /// </summary>
+        public LicenseModel GetPaidLicense()
+        {
+            return Data.Licenses.GetPaid();
+        }
+
+        /// <summary>
+        /// Gets an existing trial license from the seed data
+        /// </summary>
+        public LicenseModel GetTrialLicense()
+        {
+            return Data.Licenses.GetTrial();
+        }
+
+        /// <summary>
+        /// Gets an existing unregistered license from the seed data
+        /// </summary>
+        public LicenseModel GetUnregisteredLicense()
+        {
+            return Data.Licenses.GetUnregistered();
+        }
+
+        /// <summary>
+        /// Gets a license based on status from seed data, then fetches the signed version from API.
+        /// For statuses that require creating new data (like new trial), uses existing seed data.
+        /// </summary>
+        public async Task<LicenseModel> GetLicenseAsync(LicenseStatusTitles licenseStatusTitles = LicenseStatusTitles.Valid, ProductType type = ProductType.ManyFeatures)
+        {
+            LicenseModel seedLicense;
+            int validDays = 90;
+
+            switch (licenseStatusTitles)
+            {
+                case LicenseStatusTitles.Expired:
+                    seedLicense = Data.Licenses.PaidLicenses[0];
+                    validDays = 0;
+                    break;
+
+                case LicenseStatusTitles.Valid:
+                    seedLicense = Data.Licenses.PaidLicenses[0];
+                    validDays = 90;
+                    break;
+
+                case LicenseStatusTitles.ValidTrial:
+                    seedLicense = Data.Licenses.TrialLicenses[0];
+                    validDays = 90;
+                    break;
+
+                case LicenseStatusTitles.InValidTrial:
+                    seedLicense = Data.Licenses.TrialLicenses[0];
+                    validDays = 0;
+                    break;
+
+                case LicenseStatusTitles.ReceiptExpired:
+                    // Use a license with an expired receipt
+                    seedLicense = Data.Licenses.PaidLicenses[0];
+                    validDays = 10;
+                    break;
+
+                case LicenseStatusTitles.ReceiptUnregistered:
+                    seedLicense = Data.Licenses.UnregisteredLicenses[0];
+                    validDays = 90;
+                    break;
+
+                default:
+                    seedLicense = Data.Licenses.PaidLicenses[0];
+                    validDays = 90;
+                    break;
+            }
+
+            // Get the signed license from the API
+            var xml = await GetSignedLicenseXmlAsync(seedLicense, validDays);
+            return LicenseModel.FromXml(xml);
+        }
+
+        #region Legacy methods for backward compatibility - these POST/register new data
+
+        /// <summary>
+        /// Registers a new computer via the API (uses static data from NoLicenseComputers)
+        /// </summary>
+        [Obsolete("Use GetComputerWithoutLicense() for seed data or ensure database is reset between tests")]
         public async Task<ComputerModel> RegisterRandomComputer()
         {
-            var c = Computers.FromRandom();
+            var c = Computers.ForNewLicense();
             var msg = await HttpClient.PostAsJsonAsync("computer", new { c.MacAddress, c.Name });
+            if (msg.StatusCode == HttpStatusCode.Conflict)
+            {
+                // Computer already exists from seed data, just return it
+                return c;
+            }
             if (!msg.IsSuccessStatusCode)
                 ThrowHelper.ThrowUnSuccessfulRequest(HttpClient.BaseAddress + "computer");
             return await HttpClient.GetFromJsonAsync<ComputerModel>(msg.Headers.Location!)
                 ?? throw new Exception("no computer was found");
         }
 
-        public async Task<ProductModel> RegisterRandomProductAsync(ProductType type)
+        /// <summary>
+        /// Gets a product from seed data (no longer creates random products)
+        /// </summary>
+        [Obsolete("Use GetProduct() instead - products come from seed data")]
+        public Task<ProductModel> RegisterRandomProductAsync(ProductType type)
         {
-            var p = Products.FromType(type);
-            var msg = await HttpClient.PostAsJsonAsync("product", new { p.Name })
-                ?? throw new NullReferenceException("message from server was null");
-
-            //even bogus makes the same product twice sometimes
-            if (msg.StatusCode == HttpStatusCode.Conflict)
-                return await HttpClient.GetFromJsonAsync<ProductModel>($"product?id={p.Id}")
-                    ?? throw new NullReferenceException($"Could not get {p.Id} from server ");
-
-            if (!msg.IsSuccessStatusCode)
-                ThrowHelper.ThrowUnSuccessfulRequest(HttpClient.BaseAddress + "product");
-
-
-            if (msg.Headers.Location == null)
-                throw new NullReferenceException($"response from product has no location header. for product {p.Name}");
-
-            var val = await HttpClient.GetFromJsonAsync<ProductModel>(Uri.EscapeUriString(msg.Headers.Location.ToString()));
-            return val ?? throw new Exception("Product was null");
+            return Task.FromResult(Products.FromType(type));
         }
 
         /// <summary>
-        /// creates a new receipt for a product , as if someone has just purchased it
+        /// Gets a receipt from seed data for a product
         /// </summary>
-        /// <param name="p">the product to make the receipt for</param>
-        /// <param name="expires">the time the receipt will expire</param>
-        /// <returns></returns>
-        /// <exception cref="Exception">When the server response is not successful</exception>
-        public async Task<ReceiptModel> RegisterRandomReceiptForProduct(ProductModel p, DateTime expires)
+        [Obsolete("Use GetReceiptForProduct() instead - receipts come from seed data")]
+        public Task<ReceiptModel> RegisterRandomReceiptForProduct(ProductModel p, DateTime expires)
         {
-            var r = Receipts.ForProduct(p, expires);
-            var msg = await HttpClient.PostAsJsonAsync("receipt", new { r.Qty, Product = r.Product.Id, r.Code, r.BuyerEmail, r.Expires });
-            if (!msg.IsSuccessStatusCode)
-                ThrowHelper.ThrowUnSuccessfulRequest(HttpClient.BaseAddress + "receipt");
-            var val = await HttpClient.GetFromJsonAsync<ReceiptModel>(Uri.EscapeUriString(msg.Headers.Location.ToString()));
-            return val ?? throw new Exception("returned receipt was null");
+            return Task.FromResult(Receipts.ForProduct(p));
         }
 
         /// <summary>
-        /// creates a bogus license in the server
+        /// Gets a license based on the status from seed data.
+        /// Note: This method now uses pre-seeded data instead of creating random licenses.
         /// </summary>
-        /// <param name="licenseStatusTitles"></param>
-        /// <param name="type"></param>
-        /// <returns>the license that was created</returns>
         public async Task<LicenseModel> RegisterRandomLicenseAsync(LicenseStatusTitles licenseStatusTitles = LicenseStatusTitles.Valid, ProductType type = ProductType.ManyFeatures)
         {
-            var c = await RegisterRandomComputer();
-            var p = await RegisterRandomProductAsync(type);
-            var r = await RegisterRandomReceiptForProduct(p, DateTime.Now.AddDays(99));
-            LicenseModel l = new();
-            switch (licenseStatusTitles)
-            {
-                case LicenseStatusTitles.Expired:
-                    l = await PostLicenseAsync(r, p, c, 0);
-                    break;
-                case LicenseStatusTitles.Valid:
-                    l = await PostLicenseAsync(r, p, c, 90);
-                    break;
-                case LicenseStatusTitles.ValidTrial:
-                    l = await PostLicenseAsync(null, p, c, 90);
-                    break;
-                case LicenseStatusTitles.InValidTrial:
-                    l = await PostLicenseAsync(null, p, c, 90);
-                    break;
-                case LicenseStatusTitles.ReceiptExpired:
-                    r = await RegisterRandomReceiptForProduct(p, DateTime.Now.Subtract(TimeSpan.FromDays(5)));
-                    l = await PostLicenseAsync(r, p, c, 10);
-                    break;
-                case LicenseStatusTitles.ReceiptUnregistered:
-                    l = await PostLicenseAsync(r, p, c, 90);
-                    var response = await HttpClient.PatchAsJsonAsync("license", new { License = l.Id });
-                    response.EnsureSuccessStatusCode();
-
-                    //get un-registered receipt
-                    l = LicenseModel.FromXml(await GetSignedLicenseXmlAsync(l));
-                    break;
-                default:
-                    break;
-            }
-            return l;
+            return await GetLicenseAsync(licenseStatusTitles, type);
         }
 
-        async Task<LicenseModel> PostLicenseAsync(ReceiptModel? r, ProductModel p, ComputerModel c, int validDays = 90)
-        {
-            var lic = Licenses.FromType(r, p, c);
-            var response = await HttpClient.PostAsJsonAsync("license", new { Product = p.Id, Computer = c.Id });
-            response.EnsureSuccessStatusCode();
-
-            lic = LicenseModel.FromXml(await GetSignedLicenseXmlAsync(lic, validDays));
-            if (r != null)
-            {
-                var patchResponse = await HttpClient.PatchAsJsonAsync("license", new { License = lic.Id, Code = r.Code });
-                patchResponse.EnsureSuccessStatusCode();
-            }
-
-            var xml = await GetSignedLicenseXmlAsync(lic, validDays);
-            var val = LicenseModel.FromXml(xml);
-            return val;
-        }
+        #endregion
     }
 }

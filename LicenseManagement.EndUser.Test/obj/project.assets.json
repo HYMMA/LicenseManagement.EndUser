@@ -2,23 +2,6 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.8.1": {
-      "Bogus/35.5.1": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "System"
-        ],
-        "compile": {
-          "lib/net40/Bogus.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net40/Bogus.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "coverlet.collector/6.0.2": {
         "type": "package",
         "build": {
@@ -639,37 +622,18 @@
           "build/net462/xunit.runner.visualstudio.props": {}
         }
       },
-      "EndUser/1.0.0": {
+      "LicenseManagement.EndUser/1.0.0": {
         "type": "project",
         "compile": {
-          "bin/placeholder/EndUser.dll": {}
+          "bin/placeholder/LicenseManagement.EndUser.dll": {}
         },
         "runtime": {
-          "bin/placeholder/EndUser.dll": {}
+          "bin/placeholder/LicenseManagement.EndUser.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Bogus/35.5.1": {
-      "sha512": "GBp2peww04szEJ0GlBlzCYilFDaSkL7Ja4m37YeTRjC/mgoiZnUuifmgUxVD/oLU2MC1uoXfQYK91doGp7Zkpg==",
-      "type": "package",
-      "path": "bogus/35.5.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "bogus.35.5.1.nupkg.sha512",
-        "bogus.nuspec",
-        "lib/net40/Bogus.dll",
-        "lib/net40/Bogus.xml",
-        "lib/net6.0/Bogus.dll",
-        "lib/net6.0/Bogus.xml",
-        "lib/netstandard1.3/Bogus.dll",
-        "lib/netstandard1.3/Bogus.xml",
-        "lib/netstandard2.0/Bogus.dll",
-        "lib/netstandard2.0/Bogus.xml"
-      ]
-    },
     "coverlet.collector/6.0.2": {
       "sha512": "bJShQ6uWRTQ100ZeyiMqcFlhP7WJ+bCuabUs885dJiBEzMsJMSFr7BOyeCw4rgvQokteGi5rKQTlkhfQPUXg2A==",
       "type": "package",
@@ -1629,16 +1593,15 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "EndUser/1.0.0": {
+    "LicenseManagement.EndUser/1.0.0": {
       "type": "project",
-      "path": "../EndUser/EndUser.csproj",
-      "msbuildProject": "../EndUser/EndUser.csproj"
+      "path": "../LicenseManagement.EndUser/LicenseManagement.EndUser.csproj",
+      "msbuildProject": "../LicenseManagement.EndUser/LicenseManagement.EndUser.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.8.1": [
-      "Bogus >= 35.5.1",
-      "EndUser >= 1.0.0",
+      "LicenseManagement.EndUser >= 1.0.0",
       "Microsoft.AspNet.WebApi.Client >= 6.0.0",
       "Microsoft.AspNetCore.Http.Extensions >= 2.2.0",
       "Microsoft.NET.Test.Sdk >= 17.10.0",
@@ -1656,11 +1619,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\EndUser.Test\\EndUser.Test.csproj",
-      "projectName": "EndUser.Test",
-      "projectPath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\EndUser.Test\\EndUser.Test.csproj",
+      "projectUniqueName": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\LicenseManagement.EndUser\\LicenseManagement.EndUser.Test\\LicenseManagement.EndUser.Test.csproj",
+      "projectName": "LicenseManagement.EndUser.Test",
+      "projectPath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\LicenseManagement.EndUser\\LicenseManagement.EndUser.Test\\LicenseManagement.EndUser.Test.csproj",
       "packagesPath": "C:\\Users\\Ashra\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\EndUser.Test\\obj\\",
+      "outputPath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\LicenseManagement.EndUser\\LicenseManagement.EndUser.Test\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -1685,8 +1648,8 @@
         "net481": {
           "targetAlias": "net481",
           "projectReferences": {
-            "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\EndUser\\EndUser.csproj": {
-              "projectPath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\EndUser\\EndUser.csproj"
+            "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\LicenseManagement.EndUser\\LicenseManagement.EndUser\\LicenseManagement.EndUser.csproj": {
+              "projectPath": "C:\\Users\\Ashra\\source\\repos\\Hymma.LM\\LicenseManagement.EndUser\\LicenseManagement.EndUser\\LicenseManagement.EndUser.csproj"
             }
           }
         }
@@ -1707,10 +1670,6 @@
       "net481": {
         "targetAlias": "net481",
         "dependencies": {
-          "Bogus": {
-            "target": "Package",
-            "version": "[35.5.1, )"
-          },
           "Microsoft.AspNet.WebApi.Client": {
             "target": "Package",
             "version": "[6.0.0, )"
@@ -1744,7 +1703,7 @@
             "version": "[2.8.2, )"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

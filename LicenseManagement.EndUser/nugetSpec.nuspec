@@ -27,7 +27,7 @@
 	</metadata>
 	<files>
 		<file src="..\README.md" target="" />
-		<file src="bin\Release\LicenseManagement.EndUser.dll" target="lib\net481" />
-		<file src="bin\Release\LicenseManagement.EndUser.pdb" target="lib\net481" />
+		<file src="bin\Release\Hymma.Lm.EndUser.dll" target="lib\net481" />
+		<file src="bin\Release\Hymma.Lm.EndUser.pdb" target="lib\net481" />
 	</files>
 </package>

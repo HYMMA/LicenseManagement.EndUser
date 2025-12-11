@@ -7,8 +7,8 @@
     <ProjectGuid>{AE18BD8E-BFFE-4BA1-8E65-F4B0ACCB54BF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LicenseManagement.EndUser</RootNamespace>
-    <AssemblyName>LicenseManagement.EndUser</AssemblyName>
+    <RootNamespace>Hymma.Lm.EndUser</RootNamespace>
+    <AssemblyName>Hymma.Lm.EndUser</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
