@@ -177,7 +177,7 @@
     <Content Include="MIT-LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="ILRepack" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+  <!--<Target Name="ILRepack" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
     <PropertyGroup>
       <ILRepackPath>$(MSBuildProjectDirectory)\..\packages\ILRepack.2.0.34\tools\ILRepack.exe</ILRepackPath>
       <MergedAssembly>$(MSBuildProjectDirectory)\$(OutputPath)Hymma.Lm.EndUser.dll</MergedAssembly>
@@ -189,9 +189,23 @@
       <AssembliesToMerge Include="$(MSBuildProjectDirectory)\$(OutputPath)DeviceId.Windows.Wmi.dll" />
       <AssembliesToMerge Include="$(MSBuildProjectDirectory)\$(OutputPath)Microsoft.DotNet.PlatformAbstractions.dll" />
     </ItemGroup>
-    <Exec Command="&quot;$(ILRepackPath)&quot; /keyfile:&quot;$(KeyFile)&quot; /internalize /out:&quot;$(MergedAssembly).merged&quot; &quot;$(MergedAssembly)&quot; @(AssembliesToMerge, ' ')" />
+    <Exec Command="&quot;$(ILRepackPath)&quot; /keyfile:&quot;$(KeyFile)&quot; /attr:&quot;$(MergedAssembly)&quot; /internalize /out:&quot;$(MergedAssembly).merged&quot; &quot;$(MergedAssembly)&quot; @(AssembliesToMerge, ' ')" />
     <Delete Files="$(MergedAssembly)" />
     <Move SourceFiles="$(MergedAssembly).merged" DestinationFiles="$(MergedAssembly)" />
     <Delete Files="@(AssembliesToMerge)" />
+  </Target>-->
+  <Target Name="ILRepack" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ILRepackPath>$(MSBuildProjectDirectory)\..\packages\ILRepack.2.0.34\tools\ILRepack.exe</ILRepackPath>
+      <OutDir>$(MSBuildProjectDirectory)\$(OutputPath)</OutDir>
+      <TempMergeDir>$(OutDir)ilrepack_temp</TempMergeDir>
+      <KeyFile>$(MSBuildProjectDirectory)\HymmaLm.snk</KeyFile>
+    </PropertyGroup>
+    <MakeDir Directories="$(TempMergeDir)" />
+    <Exec Command="&quot;$(ILRepackPath)&quot; /keyfile:&quot;$(KeyFile)&quot; /internalize /out:&quot;$(TempMergeDir)\Hymma.Lm.EndUser.dll&quot; &quot;$(OutDir)Hymma.Lm.EndUser.dll&quot; &quot;$(OutDir)DeviceId.dll&quot; &quot;$(OutDir)DeviceId.Windows.dll&quot; &quot;$(OutDir)DeviceId.Windows.Wmi.dll&quot; &quot;$(OutDir)Microsoft.DotNet.PlatformAbstractions.dll&quot;" />
+    <Delete Files="$(OutDir)Hymma.Lm.EndUser.dll" />
+    <Copy SourceFiles="$(TempMergeDir)\Hymma.Lm.EndUser.dll" DestinationFiles="$(OutDir)Hymma.Lm.EndUser.dll" />
+    <RemoveDir Directories="$(TempMergeDir)" />
+    <Delete Files="$(OutDir)DeviceId.dll;$(OutDir)DeviceId.Windows.dll;$(OutDir)DeviceId.Windows.Wmi.dll;$(OutDir) Microsoft.DotNet.PlatformAbstractions.dll" />
   </Target>
 </Project>
