@@ -119,7 +119,7 @@ namespace Hymma.Lm.EndUser.Test.Tests
         }
 
         [Theory]
-        [InlineData(LicenseStatusTitles.InValidTrial)]
+        [InlineData(LicenseStatusTitles.InvalidTrial)]
         [InlineData(LicenseStatusTitles.Valid)]
         [InlineData(LicenseStatusTitles.ReceiptUnregistered)]
         [InlineData(LicenseStatusTitles.ReceiptExpired)]
@@ -129,7 +129,7 @@ namespace Hymma.Lm.EndUser.Test.Tests
             var lic = await licGenerator.SaveNewLicOnDiskAsync(initialState);
 
             var trialDays = 100U;
-            if (initialState == LicenseStatusTitles.InValidTrial)
+            if (initialState == LicenseStatusTitles.InvalidTrial)
                 trialDays = 0U;
 
             var context = ContextManager.FromLic(lic, trialDays);
@@ -145,7 +145,7 @@ namespace Hymma.Lm.EndUser.Test.Tests
         }
 
         [Theory]
-        [InlineData(LicenseStatusTitles.InValidTrial)]
+        [InlineData(LicenseStatusTitles.InvalidTrial)]
         [InlineData(LicenseStatusTitles.Expired)]
         [InlineData(LicenseStatusTitles.Valid)]
         [InlineData(LicenseStatusTitles.ReceiptUnregistered)]
@@ -156,7 +156,7 @@ namespace Hymma.Lm.EndUser.Test.Tests
 
             var lic = await testServer.RegisterRandomLicenseAsync(initialState);
             var trialDays = 100U;
-            if (initialState == LicenseStatusTitles.InValidTrial)
+            if (initialState == LicenseStatusTitles.InvalidTrial)
             {
                 trialDays = 0;
             }
@@ -218,12 +218,12 @@ namespace Hymma.Lm.EndUser.Test.Tests
         [Fact]
         public async Task OnLaunch_WhenTrialExpired_ShouldRaiseTrialEndedEvent()
         {
-            var lic = await licGenerator.SaveNewLicOnDiskAsync(LicenseStatusTitles.InValidTrial, 0U);
+            var lic = await licGenerator.SaveNewLicOnDiskAsync(LicenseStatusTitles.InvalidTrial, 0U);
             var handler = new LicenseHandlingLaunch(ContextManager.FromLic(lic, 0U), OnTrialEnded: (t) => Assert.True(true));
             handler.HandleLicense();
         }
         [Theory]
-        [InlineData(LicenseStatusTitles.InValidTrial)]
+        [InlineData(LicenseStatusTitles.InvalidTrial)]
         [InlineData(LicenseStatusTitles.Expired)]
         [InlineData(LicenseStatusTitles.Valid)]
         [InlineData(LicenseStatusTitles.ReceiptUnregistered)]
@@ -249,7 +249,7 @@ namespace Hymma.Lm.EndUser.Test.Tests
         }
 
         [Theory]
-        [InlineData(LicenseStatusTitles.InValidTrial)]
+        [InlineData(LicenseStatusTitles.InvalidTrial)]
         [InlineData(LicenseStatusTitles.Expired)]
         [InlineData(LicenseStatusTitles.Valid)]
         [InlineData(LicenseStatusTitles.ReceiptUnregistered)]
@@ -258,7 +258,7 @@ namespace Hymma.Lm.EndUser.Test.Tests
         public async Task OnUninstall_FromServer_shouldUnregisterComputer(LicenseStatusTitles initialState)
         {
             var trialDays = 100U;
-            if (initialState == LicenseStatusTitles.InValidTrial)
+            if (initialState == LicenseStatusTitles.InvalidTrial)
                 trialDays = 0U;
 
             var lic = await licGenerator.SaveNewLicOnDiskAsync(initialState, trialDays);
@@ -280,12 +280,12 @@ namespace Hymma.Lm.EndUser.Test.Tests
         [Theory]
         [InlineData(LicenseStatusTitles.Expired)]
         [InlineData(LicenseStatusTitles.ReceiptUnregistered)]
-        [InlineData(LicenseStatusTitles.InValidTrial)]
+        [InlineData(LicenseStatusTitles.InvalidTrial)]
         [InlineData(LicenseStatusTitles.ReceiptExpired)]
         public async Task OnLaunch_AfterCustomerUpdatedProductKey_ShouldGrantAccess(LicenseStatusTitles title)
         {
             var trial = 100U;
-            if (title == LicenseStatusTitles.InValidTrial)
+            if (title == LicenseStatusTitles.InvalidTrial)
             {
                 trial = 0;
             }

@@ -61,11 +61,11 @@ namespace Hymma.Lm.EndUser.Test.Tests
         [InlineData(210U)]
         public async Task ShouldDetect_InValidTrial(uint trialDays)
         {
-            var lic = await server.RegisterRandomLicenseAsync(LicenseStatusTitles.InValidTrial);
+            var lic = await server.RegisterRandomLicenseAsync(LicenseStatusTitles.InvalidTrial);
             var licenseStatus = new LicenseStatus(lic, DateTime.Now);
             var context= ContextManager.GetContext(lic.Product.Name, "Hymma", trialDays, lic.Computer.MacAddress);
             var status = licenseStatus.GetLicenseStatus(context.PublisherPreferences);
-            Assert.Equal(LicenseStatusTitles.InValidTrial, status);
+            Assert.Equal(LicenseStatusTitles.InvalidTrial, status);
         }
 
         [Fact]

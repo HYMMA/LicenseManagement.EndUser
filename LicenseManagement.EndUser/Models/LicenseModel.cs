@@ -81,8 +81,11 @@ namespace Hymma.Lm.EndUser.Models{    [XmlType("License")]
             }
         }
 
-        [XmlIgnore]
-        public LicenseStatusTitles Status { get;internal set; }
+        /// <summary>
+        /// The license status as calculated by the server at signing time.
+        /// For old license files without this field, defaults to Unknown and triggers fallback calculation.
+        /// </summary>
+        public LicenseStatusTitles Status { get; set; } = LicenseStatusTitles.Unknown;
 
         /// <summary>
         /// tool to deserialize xml to this type

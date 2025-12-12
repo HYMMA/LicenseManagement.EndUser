@@ -33,7 +33,7 @@ namespace Hymma.Lm.EndUser.License.Handlers
                 case LicenseStatusTitles.ValidTrial:
                     SetNext(new ValidTrialHandler());
                     break;
-                case LicenseStatusTitles.InValidTrial:
+                case LicenseStatusTitles.InvalidTrial:
                     SetNext(new InvalidTrialHandler());
                     break;
                 case LicenseStatusTitles.ReceiptExpired:

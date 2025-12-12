@@ -6,12 +6,17 @@ namespace Hymma.Lm.EndUser.License
     public enum LicenseStatusTitles
     {
         /// <summary>
-        /// when the license data is expired
+        /// Status unknown - for backwards compatibility with old license files without Status field
+        /// </summary>
+        Unknown = 0,
+
+        /// <summary>
+        /// when the license file is expired (needs refresh from server)
         /// </summary>
         Expired,
 
         /// <summary>
-        /// this is when you want to allow users to use
+        /// license is valid with active subscription
         /// </summary>
         Valid,
 
@@ -21,9 +26,9 @@ namespace Hymma.Lm.EndUser.License
         ValidTrial,
 
         /// <summary>
-        /// license is in trial mode but has past the trial time-frame 
+        /// license is in trial mode but has past the trial time-frame
         /// </summary>
-        InValidTrial,
+        InvalidTrial,
 
         /// <summary>
         /// the receipt is present but its time stamp is expired, meaning its out of subscription
@@ -51,57 +56,61 @@ namespace Hymma.Lm.EndUser.License
         }
 
         /// <summary>
-        /// assesses a <see cref="LicenseModel"/> against certain sets of criteria
+        /// Gets the license status. Uses server-provided status if available,
+        /// otherwise falls back to client-side calculation for backwards compatibility.
         /// </summary>
-        /// <param name="criteria">license key pieces of data will be compared to this set</param>
-        /// <returns></returns>
+        /// <param name="criteria">Publisher preferences (unused when server provides status)</param>
+        /// <returns>The license status</returns>
         public LicenseStatusTitles GetLicenseStatus(PublisherPreferences criteria)
         {
-            if (IsExpired(_license))
+            // First check if license file is expired (always check this client-side)
+            if (IsLicenseFileExpired(_license))
             {
                 _license.Status = LicenseStatusTitles.Expired;
+                return _license.Status;
             }
-            else
+
+            // Use server-provided status if available (new license files)
+            if (_license.Status != LicenseStatusTitles.Unknown)
             {
-                if (_license.Updated == null)
-                {
-                    _license.Status = TrialStatus();
-                }
-                else
-                {
-                    _license.Status = PaidLicenseStatus();
-                }
+                return _license.Status;
             }
+
+            // Fallback: calculate status client-side for old license files without Status field
+            _license.Status = CalculateStatusFallback();
             return _license.Status;
         }
 
-        private LicenseStatusTitles TrialStatus()
+        /// <summary>
+        /// Fallback calculation for old license files that don't have server-provided Status
+        /// </summary>
+        private LicenseStatusTitles CalculateStatusFallback()
         {
-            // Check if still within trial period using the server-set TrialEndDate
-            if (_now < _license.TrialEndDate)
-                return LicenseStatusTitles.ValidTrial;
+            if (_license.Updated == null)
+            {
+                // Trial license - check TrialEndDate
+                if (_now < _license.TrialEndDate)
+                    return LicenseStatusTitles.ValidTrial;
+                else
+                    return LicenseStatusTitles.InvalidTrial;
+            }
             else
-                return LicenseStatusTitles.InValidTrial;
+            {
+                // Paid license - check receipt
+                if (_license.Receipt is null)
+                    return LicenseStatusTitles.ReceiptUnregistered;
+
+                if (IsReceiptExpired(_license.Receipt))
+                    return LicenseStatusTitles.ReceiptExpired;
+                else
+                    return LicenseStatusTitles.Valid;
+            }
         }
 
-        private LicenseStatusTitles PaidLicenseStatus()
-        {
-            if (_license.Receipt is null)
-                return LicenseStatusTitles.ReceiptUnregistered;
+        bool IsLicenseFileExpired(LicenseModel license)
+            => license.Expires <= _now;
 
-            if (IsExpired(_license.Receipt))
-                return LicenseStatusTitles.ReceiptExpired;
-            else
-                return LicenseStatusTitles.Valid;
-        }
-
-        bool IsExpired(LicenseModel license)
-            => IsExpired(license.Expires, _now);
-
-        bool IsExpired(ReceiptModel receipt) =>
-            IsExpired(receipt.Expires, _now);
-
-        bool IsExpired(DateTime? expires, DateTime currentTime)
-            => expires <= currentTime;
+        bool IsReceiptExpired(ReceiptModel receipt)
+            => receipt.Expires <= _now;
     }
 }

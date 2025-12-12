@@ -2,8 +2,7 @@
 <package >
 	<metadata minClientVersion="2.5">
 		<id>Hymma.Lm.EndUser.Wpf</id>
-		<!-- will be replace by msbuild target -->
-		<version>0.0.0.0</version>
+		<version>1.2.1</version>
 		<authors>HYMMA</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">MIT</license>
@@ -15,7 +14,7 @@
 		<dependencies>
 			<group targetFramework=".NETFramework4.8.1">
 				<dependency id="Hymma.Lm.EndUser"
-							version="1.2.0"></dependency>
+							version="[1.0.5,)"></dependency>
 			</group>
 		</dependencies>
 	</metadata>

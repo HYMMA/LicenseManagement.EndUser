@@ -119,7 +119,7 @@ namespace Hymma.Lm.EndUser.Test.Server
                     validDays = 90;
                     break;
 
-                case LicenseStatusTitles.InValidTrial:
+                case LicenseStatusTitles.InvalidTrial:
                     seedLicense = Data.Licenses.TrialLicenses[0];
                     validDays = 0;
                     break;
