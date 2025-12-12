@@ -2,22 +2,19 @@
 <package>
 	<metadata minClientVersion="2.5">
 		<id>Hymma.Lm.EndUser</id>
-		<version>1.0.0</version>
+		<version>1.0.2</version>
 		<authors>HYMMA</authors>
 		<owners>HYMMA</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">MIT</license>
 		<description>End-user SDK for license-management.com platform. Provides license validation, trial management, and activation handling for Windows desktop applications.</description>
-		<releaseNotes>Initial public release with full license lifecycle management.</releaseNotes>
+		<releaseNotes>DeviceId dependencies are now merged into the main assembly using ILRepack. No longer requires explicit DeviceId package references.</releaseNotes>
 		<projectUrl>https://github.com/HYMMA/LicenseManagement.EndUser</projectUrl>
 		<repository type="git" url="https://github.com/HYMMA/LicenseManagement.EndUser.git" />
 		<readme>README.md</readme>
 		<tags>license licensing software-licensing trial-management activation desktop-app hymma license-management</tags>
 		<dependencies>
 			<group targetFramework=".NETFramework4.8.1">
-				<dependency id="DeviceId" version="6.9.0" />
-				<dependency id="DeviceId.Windows" version="6.9.0" />
-				<dependency id="DeviceId.Windows.Wmi" version="6.9.0" />
 				<dependency id="Hymma.HttpClientFactory" version="1.0.7" />
 				<dependency id="Newtonsoft.Json" version="13.0.3" />
 				<dependency id="System.Memory" version="4.5.0" />

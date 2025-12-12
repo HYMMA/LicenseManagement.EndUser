@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -47,6 +47,9 @@
     </Reference>
     <Reference Include="DeviceId.Windows.Wmi, Version=6.9.0.0, Culture=neutral, PublicKeyToken=f755c371b5c59c52, processorArchitecture=MSIL">
       <HintPath>..\packages\DeviceId.Windows.Wmi.6.9.0\lib\net40\DeviceId.Windows.Wmi.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DotNet.PlatformAbstractions">
+      <HintPath>..\packages\Microsoft.DotNet.PlatformAbstractions.3.1.6\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
     </Reference>
     <Reference Include="HttpClientFactory, Version=1.0.7.0, Culture=neutral, PublicKeyToken=040d2ea61b690452, processorArchitecture=MSIL">
       <HintPath>..\packages\Hymma.HttpClientFactory.1.0.7\lib\net45\HttpClientFactory.dll</HintPath>
@@ -174,4 +177,21 @@
     <Content Include="MIT-LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="ILRepack" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ILRepackPath>$(MSBuildProjectDirectory)\..\packages\ILRepack.2.0.34\tools\ILRepack.exe</ILRepackPath>
+      <MergedAssembly>$(MSBuildProjectDirectory)\$(OutputPath)Hymma.Lm.EndUser.dll</MergedAssembly>
+      <KeyFile>$(MSBuildProjectDirectory)\HymmaLm.snk</KeyFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <AssembliesToMerge Include="$(MSBuildProjectDirectory)\$(OutputPath)DeviceId.dll" />
+      <AssembliesToMerge Include="$(MSBuildProjectDirectory)\$(OutputPath)DeviceId.Windows.dll" />
+      <AssembliesToMerge Include="$(MSBuildProjectDirectory)\$(OutputPath)DeviceId.Windows.Wmi.dll" />
+      <AssembliesToMerge Include="$(MSBuildProjectDirectory)\$(OutputPath)Microsoft.DotNet.PlatformAbstractions.dll" />
+    </ItemGroup>
+    <Exec Command="&quot;$(ILRepackPath)&quot; /keyfile:&quot;$(KeyFile)&quot; /internalize /out:&quot;$(MergedAssembly).merged&quot; &quot;$(MergedAssembly)&quot; @(AssembliesToMerge, ' ')" />
+    <Delete Files="$(MergedAssembly)" />
+    <Move SourceFiles="$(MergedAssembly).merged" DestinationFiles="$(MergedAssembly)" />
+    <Delete Files="@(AssembliesToMerge)" />
+  </Target>
 </Project>
