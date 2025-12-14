@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2024-12-14
+
+### Changed
+- Bumped version to align with assembly version 1.3.0.0
+
+### Fixed
+- Fixed Dictionary serialization issue with Metadata property - changed to List<MetadataEntry> for XML serialization compatibility
+- License files now saved with .lic extension with backwards compatibility for reading old .xml files
+
 ## [1.0.0] - 2024-12-11
 
 ### Added
