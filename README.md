@@ -9,6 +9,11 @@ End-user SDK for [license-management.com](https://license-management.com) - A li
 
 This library is designed for **client-side applications** (desktop apps, plugins, add-ins) to validate licenses, handle trials, and manage activations.
 
+> [!IMPORTANT]
+> **Account Required**: This library requires a publisher account at [license-management.com](https://license-management.com).
+>
+> **Free with Dev Subscription**: A developer subscription is available at no cost, which provides full access to all features for development and testing purposes.
+
 ## Features
 
 - **License Validation** - Validate licenses at application launch
