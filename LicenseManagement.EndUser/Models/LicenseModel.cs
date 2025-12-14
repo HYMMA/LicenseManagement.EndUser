@@ -32,7 +32,9 @@ namespace Hymma.Lm.EndUser.Models{    [XmlType("License")]
         /// <summary>
         /// key-value metadata attached to this license by the publisher
         /// </summary>
-        public Dictionary<string, string>? Metadata { get; set; }
+        [XmlArray("Metadata")]
+        [XmlArrayItem("Entry")]
+        public List<MetadataEntry> Metadata { get; set; }
 
         public DateTime? Expires
         {

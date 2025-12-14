@@ -14,7 +14,7 @@ namespace Hymma.Lm.EndUser.Registrars
             this.context = context;
         }
 
-        static string GetDefaultFullFileName(string subFolderName, string fileName) => Path.Combine(Constants.DefaultLicFileRootDir, subFolderName, fileName);
+        static string GetDefaultFullFileName(string subFolderName, string fileName) => Path.Combine(Constants.DefaultLicFileRootDir, subFolderName, fileName + ".lic");
         /// <summary>
         /// this method is public for testing only, this method will return the default full file name of a license file which is based on the product name and the publisher id
         /// </summary>
@@ -28,6 +28,16 @@ namespace Hymma.Lm.EndUser.Registrars
             if (!read || !File.Exists(fullFileName))
             {
                 fullFileName = GetDefaultFullFileName(context.PublisherPreferences.VendorId, validLicFileName);
+
+                // Backwards compatibility: check for old files without .lic extension
+                if (!File.Exists(fullFileName))
+                {
+                    var oldFileName = Path.Combine(Constants.DefaultLicFileRootDir, context.PublisherPreferences.VendorId, validLicFileName);
+                    if (File.Exists(oldFileName))
+                    {
+                        fullFileName = oldFileName;
+                    }
+                }
             }
             return fullFileName;
         }

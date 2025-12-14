@@ -2,13 +2,13 @@
 <package>
 	<metadata minClientVersion="2.5">
 		<id>Hymma.Lm.EndUser</id>
-		<version>1.0.5</version>
+		<version>1.0.6</version>
 		<authors>HYMMA</authors>
 		<owners>HYMMA</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">MIT</license>
 		<description>End-user SDK for license-management.com platform. Provides license validation, trial management, and activation handling for Windows desktop applications.</description>
-		<releaseNotes>DeviceId dependencies are now merged into the main assembly using ILRepack. No longer requires explicit DeviceId package references.</releaseNotes>
+		<releaseNotes>Fix Dictionary serialization issue with Metadata property. Changed to List&lt;MetadataEntry&gt; for XML serialization compatibility. License files now saved with .lic extension with backwards compatibility.</releaseNotes>
 		<projectUrl>https://github.com/HYMMA/LicenseManagement.EndUser</projectUrl>
 		<repository type="git" url="https://github.com/HYMMA/LicenseManagement.EndUser.git" />
 		<readme>README.md</readme>

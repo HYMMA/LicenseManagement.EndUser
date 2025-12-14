@@ -135,6 +135,7 @@
     <Compile Include="Models\ComputerModel.cs" />
     <Compile Include="Models\DbModelWithDate.cs" />
     <Compile Include="Models\LicenseModel.cs" />
+    <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\PatchLicenseModel.cs" />
     <Compile Include="Models\PostLicenseModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
