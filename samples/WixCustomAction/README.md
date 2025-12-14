@@ -105,5 +105,5 @@ Search the log for "InstallLicense" or "UnInstallLicense" to see custom action o
 ## Related
 
 - [LicenseManagement.EndUser README](../../README.md)
-- [WPF Sample](../../LicenseManagement.EndUser.Wpf/samples/WpfSampleApp/)
+- [WPF Sample](https://github.com/HYMMA/LicenseManagement.EndUser.Wpf/tree/master/samples/WpfSampleApp)
 - [Documentation](https://license-management.com/docs/)
