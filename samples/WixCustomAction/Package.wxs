@@ -1,0 +1,113 @@
+<!--
+=============================================================================
+WiX v5 Package Sample for License Management
+=============================================================================
+This sample demonstrates how to configure custom actions in a WiX installer
+to handle license registration during install/uninstall.
+
+USAGE:
+1. Replace placeholder values (YOUR_*) with your actual credentials from
+   the License Management dashboard
+2. Build the CustomAction project first
+3. Reference the CustomAction.CA.dll in the Binary element
+=============================================================================
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Package Name="My Licensed Application"
+             Manufacturer="Your Company"
+             Version="1.0.0.0"
+             UpgradeCode="PUT-YOUR-UPGRADE-GUID-HERE">
+
+        <!-- Your application's components go here -->
+        <!-- Example: <Directory>, <Component>, <File> elements -->
+
+        <!-- ================================================================
+             CUSTOM ACTION CONFIGURATION FOR LICENSE MANAGEMENT
+             ================================================================ -->
+
+        <!-- Reference to the compiled custom action DLL -->
+        <!-- WiX requires the .CA.dll (wrapper DLL), not the regular .dll -->
+        <Binary Id="CustomAction_CA_Dll"
+                SourceFile=".\CustomAction\bin\Release\net481\CustomAction.CA.dll" />
+
+        <!-- ================================================================
+             CUSTOM ACTION DATA
+             ================================================================
+             These properties pass configuration to the custom actions.
+             Format: Key1=Value1;Key2=Value2;...
+
+             IMPORTANT: Use Client API Key (PUB_*), NOT Master Key (MST_*)
+             Get these values from: Dashboard > Products > Your Product
+        -->
+
+        <!-- Data for installation custom action -->
+        <CustomAction Id="CA_SetInstallProperties"
+                      Property="CA_InstallLicense"
+                      Value="ApiKey=PUB_YOUR_CLIENT_API_KEY;ProductId=PRD_YOUR_PRODUCT_ID;VendorId=VDR_YOUR_VENDOR_ID;ValidDays=90"/>
+
+        <!-- Data for uninstallation custom action -->
+        <CustomAction Id="CA_SetUninstallProperties"
+                      Property="CA_UninstallLicense"
+                      Value="ApiKey=PUB_YOUR_CLIENT_API_KEY;ProductId=PRD_YOUR_PRODUCT_ID;VendorId=VDR_YOUR_VENDOR_ID;ValidDays=90"/>
+
+        <!-- ================================================================
+             CUSTOM ACTION DEFINITIONS
+             ================================================================
+             Execute="deferred" - Runs with elevated privileges
+             Return="ignore" - Don't fail installation if license fails
+        -->
+
+        <!-- Install license action - registers computer and downloads license -->
+        <CustomAction Id="CA_InstallLicense"
+                      BinaryRef="CustomAction_CA_Dll"
+                      DllEntry="InstallLicense"
+                      Execute="deferred"
+                      Return="ignore"/>
+
+        <!-- Uninstall license action - unregisters computer to free seat -->
+        <CustomAction Id="CA_UninstallLicense"
+                      BinaryRef="CustomAction_CA_Dll"
+                      DllEntry="UnInstallLicense"
+                      Execute="deferred"
+                      Return="ignore"/>
+
+        <!-- ================================================================
+             INSTALL EXECUTE SEQUENCE
+             ================================================================
+             Controls WHEN the custom actions run during installation.
+
+             Key conditions:
+             - NOT REMOVE: Runs on install and repair, NOT on uninstall
+             - REMOVE~="ALL": Runs ONLY on full uninstall
+        -->
+        <InstallExecuteSequence>
+            <!-- Set properties before calling the actual actions -->
+            <Custom Action="CA_SetInstallProperties"
+                    Before="CA_InstallLicense"/>
+
+            <Custom Action="CA_SetUninstallProperties"
+                    Before="CA_UninstallLicense"/>
+
+            <!-- Run install action after InstallInitialize, only on install -->
+            <Custom Action="CA_InstallLicense"
+                    After="InstallInitialize"
+                    Condition="NOT REMOVE"/>
+
+            <!-- Run uninstall action after InstallInitialize, only on full uninstall -->
+            <Custom Action="CA_UninstallLicense"
+                    After="InstallInitialize"
+                    Condition='REMOVE~="ALL"'/>
+        </InstallExecuteSequence>
+
+        <!-- ================================================================
+             FEATURES
+             ================================================================
+             Add your application features here
+        -->
+        <Feature Id="MainFeature" Title="Main Application">
+            <!-- Reference your component groups here -->
+            <!-- <ComponentGroupRef Id="YourComponents"/> -->
+        </Feature>
+
+    </Package>
+</Wix>

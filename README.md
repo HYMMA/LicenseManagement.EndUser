@@ -199,6 +199,36 @@ catch (ApiException ex)
 - **Time Tampering Detection** - NTP sync validation
 - **Secure Registry Storage** - Computer ID in HKLM
 
+## Sample Applications
+
+We provide sample applications demonstrating real-world usage patterns:
+
+### WiX Installer Custom Action
+
+The [WiX Custom Action Sample](samples/WixCustomAction/) demonstrates how to integrate license management into a WiX installer:
+- Register computers during installation
+- Unregister computers during uninstallation
+- Pass configuration via CustomActionData
+
+```csharp
+// Example custom action
+[CustomAction]
+public static ActionResult InstallLicense(Session session)
+{
+    var preferences = GetPreferences(session, "ProductId");
+    var context = new LicHandlingContext(preferences);
+    var handler = new LicenseHandlingInstall(context, null);
+    handler.HandleLicense();
+    return ActionResult.Success;
+}
+```
+
+See the [sample README](samples/WixCustomAction/README.md) for complete setup instructions.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
+
 ## License
 
 MIT - See [LICENSE](LICENSE) for details.
@@ -207,3 +237,8 @@ MIT - See [LICENSE](LICENSE) for details.
 
 - [LicenseManagement.Client](https://www.nuget.org/packages/LicenseManagement.Client) - Server-side SDK for vendors
 - [LicenseManagement.EndUser.Wpf](https://www.nuget.org/packages/Hymma.Lm.EndUser.Wpf) - WPF UI components
+
+## Documentation
+
+- [API Documentation](https://license-management.com/docs/)
+- [LLMs.txt for AI Tools](https://license-management.com/llms.txt)
