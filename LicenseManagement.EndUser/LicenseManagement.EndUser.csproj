@@ -51,8 +51,8 @@
     <Reference Include="Microsoft.DotNet.PlatformAbstractions">
       <HintPath>..\packages\Microsoft.DotNet.PlatformAbstractions.3.1.6\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
     </Reference>
-    <Reference Include="HttpClientFactory, Version=1.0.7.0, Culture=neutral, PublicKeyToken=040d2ea61b690452, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hymma.HttpClientFactory.1.0.7\lib\net45\HttpClientFactory.dll</HintPath>
+    <Reference Include="Hymma.HttpClientFactory, Version=1.0.8.0, Culture=neutral, PublicKeyToken=040d2ea61b690452, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hymma.HttpClientFactory.1.0.8\lib\net45\Hymma.HttpClientFactory.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
