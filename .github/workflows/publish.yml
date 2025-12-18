@@ -29,7 +29,7 @@ jobs:
       id: check_nuget
       shell: pwsh
       run: |
-        $packageId = "Hymma.Lm.EndUser"
+        $packageId = "LicenseManagement.EndUser"
         $version = "${{ steps.get_version.outputs.VERSION }}"
         $url = "https://api.nuget.org/v3-flatcontainer/$($packageId.ToLower())/index.json"
         try {
@@ -103,12 +103,12 @@ jobs:
 
           Install via NuGet:
           ```
-          Install-Package Hymma.Lm.EndUser -Version ${{ steps.get_version.outputs.VERSION }}
+          Install-Package LicenseManagement.EndUser -Version ${{ steps.get_version.outputs.VERSION }}
           ```
 
           Or via .NET CLI:
           ```
-          dotnet add package Hymma.Lm.EndUser --version ${{ steps.get_version.outputs.VERSION }}
+          dotnet add package LicenseManagement.EndUser --version ${{ steps.get_version.outputs.VERSION }}
           ```
         draft: false
         prerelease: false
