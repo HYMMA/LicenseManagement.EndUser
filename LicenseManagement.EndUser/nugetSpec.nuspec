@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
 	<metadata minClientVersion="2.5">
-		<id>Hymma.Lm.EndUser</id>
-		<version>1.3.0</version>
+		<id>LicenseManagement.EndUser</id>
+		<version>2.0.0</version>
 		<authors>HYMMA</authors>
 		<owners>HYMMA</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">MIT</license>
 		<description>End-user SDK for license-management.com platform. Provides license validation, trial management, and activation handling for Windows desktop applications.</description>
-		<releaseNotes>Updated to use Hymma.HttpClientFactory 1.0.8 with renamed assembly with Metadata property. Changed to List&lt;MetadataEntry&gt; for XML serialization compatibility. License files now saved with .lic extension with backwards compatibility.</releaseNotes>
+		<releaseNotes>BREAKING CHANGE: Renamed namespace from Hymma.Lm.EndUser to LicenseManagement.EndUser. Package ID changed from Hymma.Lm.EndUser to LicenseManagement.EndUser.</releaseNotes>
 		<projectUrl>https://github.com/HYMMA/LicenseManagement.EndUser</projectUrl>
 		<repository type="git" url="https://github.com/HYMMA/LicenseManagement.EndUser.git" />
 		<readme>README.md</readme>
@@ -24,7 +24,7 @@
 	</metadata>
 	<files>
 		<file src="..\README.md" target="" />
-		<file src="bin\Release\Hymma.Lm.EndUser.dll" target="lib\net481" />
-		<file src="bin\Release\Hymma.Lm.EndUser.pdb" target="lib\net481" />
+		<file src="bin\Release\LicenseManagement.EndUser.dll" target="lib\net481" />
+		<file src="bin\Release\LicenseManagement.EndUser.pdb" target="lib\net481" />
 	</files>
 </package>

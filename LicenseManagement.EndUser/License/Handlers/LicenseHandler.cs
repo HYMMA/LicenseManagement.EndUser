@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientSideUI.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     internal class LicenseHandler
     {

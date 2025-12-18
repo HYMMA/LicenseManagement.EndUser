@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Hymma.Lm.EndUser.Exceptions
+namespace LicenseManagement.EndUser.Exceptions
 {
     [Serializable]
 	public class CouldNotPatchLicenseWithReceiptException : Exception

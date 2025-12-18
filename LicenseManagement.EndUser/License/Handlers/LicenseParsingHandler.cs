@@ -1,10 +1,10 @@
-﻿using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Product.Handlers;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Product.Handlers;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     internal class LicenseParsingHandler : LicenseValidationHandler
     {

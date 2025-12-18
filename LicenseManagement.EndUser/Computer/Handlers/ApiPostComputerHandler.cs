@@ -1,10 +1,10 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.Product.Handlers;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.Product.Handlers;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.Computer
+namespace LicenseManagement.EndUser.Computer
 {
     internal class ApiPostComputerHandler : LicenseValidationHandler
     {

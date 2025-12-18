@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Hymma.Lm.EndUser.Models
+namespace LicenseManagement.EndUser.Models
 {
     public class ReceiptModel : DbModelWithDate, IEquatable<ReceiptModel>
     {

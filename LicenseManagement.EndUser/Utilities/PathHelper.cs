@@ -1,8 +1,8 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Hymma.Lm.EndUser.Utilities
+namespace LicenseManagement.EndUser.Utilities
 {
     internal static class PathHelper
     {

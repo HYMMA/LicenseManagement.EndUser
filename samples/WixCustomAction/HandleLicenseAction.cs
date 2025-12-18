@@ -7,7 +7,7 @@
 // IMPORTANT: This code runs during MSI installation with elevated privileges.
 // =============================================================================
 
-using Hymma.Lm.EndUser;
+using LicenseManagement.EndUser;
 using System;
 using WixToolset.Dtf.WindowsInstaller;
 

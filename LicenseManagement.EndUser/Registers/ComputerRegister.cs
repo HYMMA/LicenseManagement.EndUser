@@ -1,7 +1,7 @@
-﻿using Hymma.Lm.EndUser.Utilities;
+﻿using LicenseManagement.EndUser.Utilities;
 using Microsoft.Win32;
 using System.Collections.Generic;
-namespace Hymma.Lm.EndUser.Registrars
+namespace LicenseManagement.EndUser.Registrars
 {
     /// <summary>
     /// computer registrar that saves computer-id on HKCU and HKLM in registry on windows

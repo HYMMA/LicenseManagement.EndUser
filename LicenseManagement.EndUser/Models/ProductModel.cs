@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Hymma.Lm.EndUser.Models
+namespace LicenseManagement.EndUser.Models
 {
 
     public class ProductModel : DbModelWithDate, IEquatable<ProductModel>

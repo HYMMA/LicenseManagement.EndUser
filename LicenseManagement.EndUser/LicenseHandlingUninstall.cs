@@ -1,8 +1,8 @@
-﻿using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Models;
 using System;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     /// <summary>
     /// should be called during uninstall to unregister the computer from the license

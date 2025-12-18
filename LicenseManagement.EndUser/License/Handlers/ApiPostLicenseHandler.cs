@@ -1,11 +1,11 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.License.EndPoint;
-using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.License.EndPoint;
+using LicenseManagement.EndUser.Models;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     /// <summary>
     /// Creates a license for a computer on DB, if didn't exist already.

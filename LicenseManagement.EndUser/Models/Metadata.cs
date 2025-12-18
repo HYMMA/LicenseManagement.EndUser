@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace Hymma.Lm.EndUser.Models
+namespace LicenseManagement.EndUser.Models
 {
     /// <summary>
     /// A serializable key-value pair for XML serialization (Dictionary cannot be serialized by XmlSerializer)

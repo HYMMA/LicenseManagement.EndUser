@@ -1,9 +1,9 @@
-﻿using Hymma.Lm.EndUser.Computer.Handlers;
-using Hymma.Lm.EndUser.Exceptions;
+using LicenseManagement.EndUser.Computer.Handlers;
+using LicenseManagement.EndUser.Exceptions;
 using System;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.Product.Handlers
+namespace LicenseManagement.EndUser.Product.Handlers
 {
     internal class ProductNameValidatorHandler : LicenseValidationHandler
     {

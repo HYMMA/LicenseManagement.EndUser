@@ -1,7 +1,7 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     internal class ErrorHandler : LicenseValidationHandler
     {

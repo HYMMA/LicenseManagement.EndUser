@@ -1,6 +1,6 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.Extensions;
-using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.Extensions;
+using LicenseManagement.EndUser.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Specialized;
@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace Hymma.Lm.EndUser.Product.EndPoint
+namespace LicenseManagement.EndUser.Product.EndPoint
 {
     /// <summary>
     /// manages api calls related to <see cref="Models.ProductModel"/>

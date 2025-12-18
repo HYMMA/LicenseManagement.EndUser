@@ -1,7 +1,7 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
+using LicenseManagement.EndUser.Exceptions;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     internal class ExpiredLicenseHandler : LicenseValidationHandler
     {

@@ -1,13 +1,13 @@
-﻿using Hymma.Lm.EndUser.Receipt.Handlers;
-using Hymma.Lm.EndUser.Time;
-using Hymma.Lm.EndUser.Time.EndPoint;
+using LicenseManagement.EndUser.Receipt.Handlers;
+using LicenseManagement.EndUser.Time;
+using LicenseManagement.EndUser.Time.EndPoint;
 using System;
 using System.CodeDom;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     internal class LicenseStatusHandler : LicenseValidationHandler
     {

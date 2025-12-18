@@ -1,11 +1,11 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Registrars;
-using Hymma.Lm.EndUser.Signature.Handlers;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Registrars;
+using LicenseManagement.EndUser.Signature.Handlers;
 using System;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     public class LicenseHandlingLaunch : LicenseHandlingStrategy
     {

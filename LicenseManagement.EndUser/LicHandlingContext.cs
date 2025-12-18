@@ -1,8 +1,8 @@
-﻿using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Models;
 using System;
 using System.Threading;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     /// <summary>
     /// a singleton, thread safe context to hold <see cref="LicenseValidationHandler.HandleContextAsync(LicHandlingContext)"/> in memory

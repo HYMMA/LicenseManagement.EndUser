@@ -1,8 +1,8 @@
-﻿using Hymma.Lm.EndUser.Product.Handlers;
+using LicenseManagement.EndUser.Product.Handlers;
 using System;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     internal class ApiGetComputerHandler : LicenseValidationHandler
     {

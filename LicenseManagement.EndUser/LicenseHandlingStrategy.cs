@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using Hymma.Lm.EndUser.Registrars;
-using Hymma.Lm.EndUser.Models;
-namespace Hymma.Lm.EndUser
+using LicenseManagement.EndUser.Registrars;
+using LicenseManagement.EndUser.Models;
+namespace LicenseManagement.EndUser
 {
     public abstract class LicenseHandlingStrategy
     {

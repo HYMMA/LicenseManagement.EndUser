@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     public abstract class LicenseValidationHandler
     {

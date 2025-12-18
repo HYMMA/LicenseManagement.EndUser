@@ -7,8 +7,8 @@
     <ProjectGuid>{AE18BD8E-BFFE-4BA1-8E65-F4B0ACCB54BF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hymma.Lm.EndUser</RootNamespace>
-    <AssemblyName>Hymma.Lm.EndUser</AssemblyName>
+    <RootNamespace>LicenseManagement.EndUser</RootNamespace>
+    <AssemblyName>LicenseManagement.EndUser</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -203,9 +203,9 @@
       <KeyFile>$(MSBuildProjectDirectory)\HymmaLm.snk</KeyFile>
     </PropertyGroup>
     <MakeDir Directories="$(TempMergeDir)" />
-    <Exec Command="&quot;$(ILRepackPath)&quot; /keyfile:&quot;$(KeyFile)&quot; /internalize /out:&quot;$(TempMergeDir)\Hymma.Lm.EndUser.dll&quot; &quot;$(OutDir)Hymma.Lm.EndUser.dll&quot; &quot;$(OutDir)DeviceId.dll&quot; &quot;$(OutDir)DeviceId.Windows.dll&quot; &quot;$(OutDir)DeviceId.Windows.Wmi.dll&quot; &quot;$(OutDir)Microsoft.DotNet.PlatformAbstractions.dll&quot;" />
-    <Delete Files="$(OutDir)Hymma.Lm.EndUser.dll" />
-    <Copy SourceFiles="$(TempMergeDir)\Hymma.Lm.EndUser.dll" DestinationFiles="$(OutDir)Hymma.Lm.EndUser.dll" />
+    <Exec Command="&quot;$(ILRepackPath)&quot; /keyfile:&quot;$(KeyFile)&quot; /internalize /out:&quot;$(TempMergeDir)\LicenseManagement.EndUser.dll&quot; &quot;$(OutDir)LicenseManagement.EndUser.dll&quot; &quot;$(OutDir)DeviceId.dll&quot; &quot;$(OutDir)DeviceId.Windows.dll&quot; &quot;$(OutDir)DeviceId.Windows.Wmi.dll&quot; &quot;$(OutDir)Microsoft.DotNet.PlatformAbstractions.dll&quot;" />
+    <Delete Files="$(OutDir)LicenseManagement.EndUser.dll" />
+    <Copy SourceFiles="$(TempMergeDir)\LicenseManagement.EndUser.dll" DestinationFiles="$(OutDir)LicenseManagement.EndUser.dll" />
     <RemoveDir Directories="$(TempMergeDir)" />
     <Delete Files="$(OutDir)DeviceId.dll;$(OutDir)DeviceId.Windows.dll;$(OutDir)DeviceId.Windows.Wmi.dll;$(OutDir) Microsoft.DotNet.PlatformAbstractions.dll" />
   </Target>

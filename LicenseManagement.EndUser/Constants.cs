@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.IO;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     public static class Constants
     {

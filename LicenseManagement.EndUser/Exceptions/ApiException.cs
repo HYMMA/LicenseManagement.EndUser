@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Net;
 
-namespace Hymma.Lm.EndUser.Exceptions
+namespace LicenseManagement.EndUser.Exceptions
 {
     public class ApiException : Exception
     {

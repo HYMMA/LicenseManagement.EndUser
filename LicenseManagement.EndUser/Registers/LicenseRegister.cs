@@ -1,9 +1,9 @@
-﻿using Hymma.Lm.EndUser.Utilities;
+using LicenseManagement.EndUser.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Hymma.Lm.EndUser.Registrars
+namespace LicenseManagement.EndUser.Registrars
 {
     public class LicenseRegister
     {

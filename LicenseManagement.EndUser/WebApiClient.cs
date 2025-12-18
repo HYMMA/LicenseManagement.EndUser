@@ -1,8 +1,8 @@
-﻿using HttpClientFactory.Impl;
+using HttpClientFactory.Impl;
 using System;
 using System.Net.Http;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     internal static class WebApiClient
     {

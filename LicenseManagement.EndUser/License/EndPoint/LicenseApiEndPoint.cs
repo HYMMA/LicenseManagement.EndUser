@@ -1,7 +1,7 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.Extensions;
-using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Utilities;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.Extensions;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.License.EndPoint
+namespace LicenseManagement.EndUser.License.EndPoint
 {
     public class LicenseApiEndPoint
     {

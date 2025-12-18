@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Hymma.Lm.EndUser.Models
+namespace LicenseManagement.EndUser.Models
 {
     public class PostLicenseModel
     {

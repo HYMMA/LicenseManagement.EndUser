@@ -1,10 +1,12 @@
-﻿using Hymma.Lm.EndUser.License;
+using LicenseManagement.EndUser.License;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Hymma.Lm.EndUser.Models{    [XmlType("License")]
+namespace LicenseManagement.EndUser.Models
+{
+    [XmlType("License")]
     public class LicenseModel : DbModelWithDate
     {
         ProductModel _product;
@@ -118,4 +120,5 @@ namespace Hymma.Lm.EndUser.Models{    [XmlType("License")]
             }
         }
     }
-}
+}
+

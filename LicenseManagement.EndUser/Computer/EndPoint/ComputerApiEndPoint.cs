@@ -1,6 +1,6 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.Extensions;
-using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.Extensions;
+using LicenseManagement.EndUser.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     public class ComputerApiEndPoint
     {

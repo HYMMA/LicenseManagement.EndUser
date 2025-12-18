@@ -1,8 +1,8 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 
-namespace Hymma.Lm.EndUser.Utilities
+namespace LicenseManagement.EndUser.Utilities
 {
     public class MainRegistryKeyInHkcu
     {

@@ -1,8 +1,8 @@
-﻿using Hymma.Lm.EndUser.License.EndPoint;
-using Hymma.Lm.EndUser.Signature.Handlers;
+using LicenseManagement.EndUser.License.EndPoint;
+using LicenseManagement.EndUser.Signature.Handlers;
 using System;
 using System.Threading.Tasks;
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     public class ApiGetLicenseHandler : LicenseValidationHandler
     {

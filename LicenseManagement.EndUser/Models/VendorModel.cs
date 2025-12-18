@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 
-namespace Hymma.Lm.EndUser.Models
+namespace LicenseManagement.EndUser.Models
 {
     [XmlType("Vendor")]
     public class VendorModel : DbModelWithDate, IEquatable<VendorModel>

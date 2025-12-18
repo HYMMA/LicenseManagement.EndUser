@@ -1,7 +1,7 @@
-﻿using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Models;
 using System;
 
-namespace Hymma.Lm.EndUser.License
+namespace LicenseManagement.EndUser.License
 {
     public enum LicenseStatusTitles
     {

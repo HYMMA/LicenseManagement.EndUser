@@ -18,7 +18,7 @@ The custom actions handle:
 
 - [WiX Toolset v5](https://wixtoolset.org/)
 - .NET Framework 4.8.1
-- [Hymma.Lm.EndUser](https://www.nuget.org/packages/Hymma.Lm.EndUser) NuGet package
+- [LicenseManagement.EndUser](https://www.nuget.org/packages/LicenseManagement.EndUser) NuGet package (v2.0+)
 - Account at [license-management.com](https://license-management.com)
 
 ## Setup

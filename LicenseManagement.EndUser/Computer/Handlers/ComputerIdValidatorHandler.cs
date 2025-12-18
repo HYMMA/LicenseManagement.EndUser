@@ -1,9 +1,9 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.License.Handlers;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.License.Handlers;
 using System;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.Computer.Handlers
+namespace LicenseManagement.EndUser.Computer.Handlers
 {
     internal class ComputerIdValidatorHandler : LicenseValidationHandler
     {

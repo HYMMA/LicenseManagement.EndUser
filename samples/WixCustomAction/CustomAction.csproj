@@ -36,7 +36,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Hymma.Lm.EndUser" Version="1.*" />
+    <PackageReference Include="LicenseManagement.EndUser" Version="2.*" />
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="5.*" />
   </ItemGroup>
   <ItemGroup>

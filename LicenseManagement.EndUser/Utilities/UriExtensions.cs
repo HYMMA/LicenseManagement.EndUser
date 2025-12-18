@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 
-namespace Hymma.Lm.EndUser.Extensions
+namespace LicenseManagement.EndUser.Extensions
 {
     public static class UriExtensions
     {

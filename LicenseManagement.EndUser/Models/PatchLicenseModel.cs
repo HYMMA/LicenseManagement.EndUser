@@ -1,4 +1,4 @@
-﻿namespace Hymma.Lm.EndUser.Models
+namespace LicenseManagement.EndUser.Models
 {
     /// <summary>
     /// this is used to updated a license and tell the system that someone has paid for the product. Hence the receipt code field

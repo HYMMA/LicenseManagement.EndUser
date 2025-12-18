@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     /// <summary>
     /// Event arguments for the BeforeLicensePost event

@@ -1,11 +1,11 @@
-﻿using Hymma.Lm.EndUser.License.Handlers;
-using Hymma.Lm.EndUser.Signature.EndPoint;
+using LicenseManagement.EndUser.License.Handlers;
+using LicenseManagement.EndUser.Signature.EndPoint;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Hymma.Lm.EndUser.Signature.Handlers
+namespace LicenseManagement.EndUser.Signature.Handlers
 {
     internal class LicenseSignatureValidationHandler : LicenseValidationHandler
     {

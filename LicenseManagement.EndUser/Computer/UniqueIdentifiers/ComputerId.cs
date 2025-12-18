@@ -1,9 +1,9 @@
-﻿using DeviceId;
-using Hymma.Lm.EndUser.Registrars;
+using DeviceId;
+using LicenseManagement.EndUser.Registrars;
 using System;
 using System.Collections.Generic;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     public sealed class ComputerId
     {

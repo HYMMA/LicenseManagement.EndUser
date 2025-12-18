@@ -1,11 +1,11 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.License.EndPoint;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.License.EndPoint;
 using System;
 using System.Threading.Tasks;
-using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Models;
 
 
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     internal sealed class PatchLicenseWithReceiptHandler : LicenseValidationHandler
     {

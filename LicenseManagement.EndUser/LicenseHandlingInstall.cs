@@ -1,12 +1,12 @@
-﻿using Hymma.Lm.EndUser.Computer;
-using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Registrars;
+using LicenseManagement.EndUser.Computer;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Registrars;
 using System;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     public sealed class LicenseHandlingInstall : LicenseHandlingStrategy
     {

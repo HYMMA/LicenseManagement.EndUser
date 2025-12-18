@@ -1,11 +1,11 @@
-﻿using Hymma.Lm.EndUser.Time;
-using Hymma.Lm.EndUser.Time.EndPoint;
+using LicenseManagement.EndUser.Time;
+using LicenseManagement.EndUser.Time.EndPoint;
 using System;
 using System.Management;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     public class TimeSyncDiagnostic
     {

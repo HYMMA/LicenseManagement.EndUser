@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Hymma.Lm.EndUser.Models
+namespace LicenseManagement.EndUser.Models
 {
     public class DbModelWithDate  
     {

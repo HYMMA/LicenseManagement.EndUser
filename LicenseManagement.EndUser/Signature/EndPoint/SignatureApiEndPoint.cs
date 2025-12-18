@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.Signature.EndPoint
+namespace LicenseManagement.EndUser.Signature.EndPoint
 {
     /// <summary>
     /// api endpoints helper class to deal with public key and signatures

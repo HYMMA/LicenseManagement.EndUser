@@ -1,7 +1,7 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http;
 
-namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     internal class AuthorizedRequest : HttpRequestMessage
     {

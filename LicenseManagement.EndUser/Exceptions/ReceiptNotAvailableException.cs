@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
-namespace Hymma.Lm.EndUser.Exceptions
+namespace LicenseManagement.EndUser.Exceptions
 {
     [Serializable]
     public class ReceiptNotAvailableException : Exception

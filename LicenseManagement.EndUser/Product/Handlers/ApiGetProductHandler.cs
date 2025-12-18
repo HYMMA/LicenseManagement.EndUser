@@ -1,10 +1,10 @@
-﻿using Hymma.Lm.EndUser.License.Handlers;
-using Hymma.Lm.EndUser.Product.EndPoint;
+using LicenseManagement.EndUser.License.Handlers;
+using LicenseManagement.EndUser.Product.EndPoint;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.Product.Handlers
+namespace LicenseManagement.EndUser.Product.Handlers
 {
     /// <summary>
     /// creates a handler to get <see cref="Models.ProductModel"/>

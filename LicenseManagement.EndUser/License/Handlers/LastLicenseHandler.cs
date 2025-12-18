@@ -1,13 +1,13 @@
-﻿using DeviceId.Encoders;
-using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.Registrars;
-using Hymma.Lm.EndUser.Time.EndPoint;
-using Hymma.Lm.EndUser.Utilities;
+using DeviceId.Encoders;
+using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.Registrars;
+using LicenseManagement.EndUser.Time.EndPoint;
+using LicenseManagement.EndUser.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.License.Handlers
+namespace LicenseManagement.EndUser.License.Handlers
 {
     internal class LastLicenseHandler : LicenseValidationHandler
     {

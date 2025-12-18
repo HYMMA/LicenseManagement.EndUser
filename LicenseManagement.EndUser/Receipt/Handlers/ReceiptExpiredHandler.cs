@@ -1,9 +1,9 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.License.Handlers;
+﻿using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.License.Handlers;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Hymma.Lm.EndUser.Receipt.Handlers
+namespace LicenseManagement.EndUser.Receipt.Handlers
 {
 
     /// <summary>

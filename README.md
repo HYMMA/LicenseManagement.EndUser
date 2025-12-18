@@ -1,8 +1,8 @@
 # LicenseManagement.EndUser
 
 [![Build and Test](https://github.com/HYMMA/LicenseManagement.EndUser/actions/workflows/build.yml/badge.svg)](https://github.com/HYMMA/LicenseManagement.EndUser/actions/workflows/build.yml)
-[![NuGet](https://img.shields.io/nuget/v/Hymma.Lm.EndUser.svg)](https://www.nuget.org/packages/Hymma.Lm.EndUser)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/Hymma.Lm.EndUser.svg)](https://www.nuget.org/packages/Hymma.Lm.EndUser)
+[![NuGet](https://img.shields.io/nuget/v/LicenseManagement.EndUser.svg)](https://www.nuget.org/packages/LicenseManagement.EndUser)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/LicenseManagement.EndUser.svg)](https://www.nuget.org/packages/LicenseManagement.EndUser)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 End-user SDK for [license-management.com](https://license-management.com) - A license management platform for software vendors.
@@ -28,13 +28,16 @@ This library is designed for **client-side applications** (desktop apps, plugins
 ## Installation
 
 ```bash
-dotnet add package Hymma.Lm.EndUser
+dotnet add package LicenseManagement.EndUser
 ```
 
 Or via NuGet Package Manager:
 ```
-Install-Package Hymma.Lm.EndUser
+Install-Package LicenseManagement.EndUser
 ```
+
+> [!WARNING]
+> **Breaking Change in v2.0.0**: The package has been renamed from `Hymma.Lm.EndUser` to `LicenseManagement.EndUser`. See the [Migration Guide](#migrating-from-v1x) below.
 
 ## Quick Start
 
@@ -225,6 +228,45 @@ public static ActionResult InstallLicense(Session session)
 
 See the [sample README](samples/WixCustomAction/README.md) for complete setup instructions.
 
+## Migrating from v1.x
+
+Version 2.0.0 introduces a breaking change: the namespace has been renamed from `Hymma.Lm.EndUser` to `LicenseManagement.EndUser`.
+
+### Steps to Migrate
+
+1. **Update NuGet Package Reference**
+   ```bash
+   # Remove old package
+   dotnet remove package Hymma.Lm.EndUser
+
+   # Add new package
+   dotnet add package LicenseManagement.EndUser
+   ```
+
+2. **Update Namespace Imports**
+   Replace all occurrences:
+   ```csharp
+   // Old
+   using Hymma.Lm.EndUser;
+
+   // New
+   using LicenseManagement.EndUser;
+   ```
+
+3. **Update Assembly References** (if using direct DLL reference)
+   - Old: `Hymma.Lm.EndUser.dll`
+   - New: `LicenseManagement.EndUser.dll`
+
+### What Changed
+
+| v1.x | v2.0.0 |
+|------|--------|
+| `Hymma.Lm.EndUser` namespace | `LicenseManagement.EndUser` namespace |
+| `Hymma.Lm.EndUser.dll` | `LicenseManagement.EndUser.dll` |
+| NuGet: `Hymma.Lm.EndUser` | NuGet: `LicenseManagement.EndUser` |
+
+All classes, methods, and APIs remain unchanged - only the namespace has been updated for consistency.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
@@ -236,7 +278,7 @@ MIT - See [LICENSE](LICENSE) for details.
 ## Related Packages
 
 - [LicenseManagement.Client](https://www.nuget.org/packages/LicenseManagement.Client) - Server-side SDK for vendors
-- [LicenseManagement.EndUser.Wpf](https://www.nuget.org/packages/Hymma.Lm.EndUser.Wpf) - WPF UI components
+- [LicenseManagement.EndUser.Wpf](https://www.nuget.org/packages/LicenseManagement.EndUser.Wpf) - WPF UI components
 
 ## Documentation
 

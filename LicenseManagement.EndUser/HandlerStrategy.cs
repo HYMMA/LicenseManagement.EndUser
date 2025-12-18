@@ -1,4 +1,4 @@
-﻿namespace Hymma.Lm.EndUser
+namespace LicenseManagement.EndUser
 {
     /// <summary>
     /// indicates when this context is being called, during install that we have access to admin and internet or during launch
