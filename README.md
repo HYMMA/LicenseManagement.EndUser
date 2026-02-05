@@ -52,10 +52,11 @@ var preferences = new PublisherPreferences
     ProductId = "PRD_01XYZ...",     // Your product ID
     ApiKey = "your-client-api-key", // Client API key (NOT master key)
     PublicKey = "<RSAKeyValue>...</RSAKeyValue>", // For signature verification
-    TrialDays = 14,                 // Trial period duration
     ValidDays = 90                  // License cache validity
 };
 ```
+
+> The trial period is controlled by the server and embedded in the license file as `TrialEndDate`. If a trial is extended in the dashboard, the updated `TrialEndDate` will be reflected after the client refreshes the license file.
 
 ### 2. Handle License at Installation
 
