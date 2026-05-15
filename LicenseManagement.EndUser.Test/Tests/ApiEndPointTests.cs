@@ -2,7 +2,9 @@
 using LicenseManagement.EndUser.Models;
 using LicenseManagement.EndUser.Test.Server;
 using Microsoft.AspNetCore.Http.Extensions;
+using System;
 using System.Net;
+using System.Net.Http.Json;
 using Xunit;
 using LicenseManagement.EndUser.Test.Data;
 using LicenseManagement.EndUser.License.EndPoint;
@@ -51,17 +53,19 @@ namespace LicenseManagement.EndUser.Test.Tests
         [Fact]
         public async Task LicenseEndPoint_WhenPostingNewLic_ShouldReturnCreatedStatusCode()
         {
-            //arrange
-            var comp = tesetServer.GetComputerWithoutLicense();
-            // Use OneFeature (Pro) product — install strategy tests use NoFeatures, so this avoids a 409 Conflict.
+            // Create a one-off computer so there is guaranteed to be no prior license record,
+            // regardless of whether previous runs cleaned up.
+            var bytes = Guid.NewGuid().ToByteArray();
+            var tempMac = $"{bytes[0]:X2}:{bytes[1]:X2}:{bytes[2]:X2}:{bytes[3]:X2}:{bytes[4]:X2}:{bytes[5]:X2}";
+            var compResponse = await tesetServer.HttpClient.PostAsJsonAsync("computer", new { MacAddress = tempMac, Name = "TempTestComputer" });
+            compResponse.EnsureSuccessStatusCode();
+            var comp = await tesetServer.HttpClient.GetFromJsonAsync<ComputerModel>(compResponse.Headers.Location!);
+
             var product = tesetServer.GetProduct(ProductType.OneFeature);
             var licEndPoint = new LicenseApiEndPoint(ContextManager.ApiKey);
 
-            //act
-            var model = new PostLicenseModel() { Computer = comp.Id, Product = product.Id };
-            var result = await licEndPoint.PostLicenseAsync(model);
+            var result = await licEndPoint.PostLicenseAsync(new PostLicenseModel { Computer = comp!.Id, Product = product.Id });
 
-            //Assert
             Assert.Equal(HttpStatusCode.Created, result);
         }
 
