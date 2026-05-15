@@ -18,11 +18,20 @@ namespace LicenseManagement.EndUser.Test.Tests
     {
         readonly TestServer testServer;
         readonly LicGenerator licGenerator;
+        readonly string _originalMachineId = ComputerId.Instance.MachineId;
+        readonly string _originalMachineName = ComputerId.Instance.MachineName;
 
         public LicenseStrategyTests(TestServer server)
         {
             this.testServer = server;
             this.licGenerator = new LicGenerator(server);
+        }
+
+        public override void Dispose()
+        {
+            ComputerId.Instance.MachineId = _originalMachineId;
+            ComputerId.Instance.MachineName = _originalMachineName;
+            base.Dispose();
         }
 
         [Fact]
@@ -31,6 +40,8 @@ namespace LicenseManagement.EndUser.Test.Tests
             //arrange
             //GET a license from server
             var lic = await licGenerator.SaveNewLicOnDiskAsync(LicenseStatusTitles.Valid);
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
             var context = ContextManager.FromLic(lic);
 
             var register = new LicenseRegister(context);
@@ -102,9 +113,16 @@ namespace LicenseManagement.EndUser.Test.Tests
         [Fact]
         public async Task OnUninstall_ShouldGetLicOnline()
         {
-            //first element is used in another test
             var lic = await testServer.RegisterRandomLicenseAsync();
-            var context = ContextManager.GetContext(lic.Product!.Id!, "VDR_vendor", 4, lic.Computer!.MacAddress!);
+
+            // Write the license to disk so the uninstall handler can read it.
+            var context = ContextManager.GetContext(lic.Product!.Id!, lic.Product!.Vendor!.Id!, 4, lic.Computer!.MacAddress!);
+            var signedXml = await testServer.GetSignedLicenseXmlAsync(lic);
+            context.SetLicenseData(signedXml, false);
+            new LicenseRegister(context).TryWrite();
+
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
 
             //we're uninstalling here
             var handler = new LicenseHandlingUninstall(context);
@@ -132,6 +150,10 @@ namespace LicenseManagement.EndUser.Test.Tests
             if (initialState == LicenseStatusTitles.InvalidTrial)
                 trialDays = 0U;
 
+            // Uninstall reads the on-disk license; the computer ID check uses ComputerId.Instance.MachineId.
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
+
             var context = ContextManager.FromLic(lic, trialDays);
             var handler = new LicenseHandlingUninstall(context, null);
             handler.HandleLicense();
@@ -153,20 +175,27 @@ namespace LicenseManagement.EndUser.Test.Tests
         [InlineData(LicenseStatusTitles.ValidTrial)]
         public async Task OnLaunch_ShouldAlways_SetStatus(LicenseStatusTitles initialState)
         {
-
-            var lic = await testServer.RegisterRandomLicenseAsync(initialState);
             var trialDays = 100U;
             if (initialState == LicenseStatusTitles.InvalidTrial)
-            {
                 trialDays = 0;
-            }
+
+            // Use seedIndex=1 to avoid conflict with uninstall tests that modify index-0 licenses.
+            // Write the seed license directly to disk so launch detects the status without a server round-trip.
+            int validDays = initialState == LicenseStatusTitles.Expired ? 0 : 90;
+            var lic = await testServer.GetLicenseAsync(initialState, seedIndex: 1);
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
+
             var context = ContextManager.FromLic(lic, trialDays);
-            var launcher = new LicenseHandlingLaunch(context,
-                OnLicFileNotFound: (c) =>
-                {
-                    var installer = new LicenseHandlingInstall(c, null);
-                    installer.HandleLicense();
-                });
+            // Force ValidDays=0 so that when the Expired handler re-fetches from server it gets
+            // another expired license (server honours the validDays parameter), keeping status Expired.
+            if (initialState == LicenseStatusTitles.Expired)
+                context.PublisherPreferences.ValidDays = 0;
+            var signedXml = await testServer.GetSignedLicenseXmlAsync(lic, validDays);
+            context.SetLicenseData(signedXml, false);
+            new LicenseRegister(context).TryWrite();
+
+            var launcher = new LicenseHandlingLaunch(context);
             launcher.HandleLicense();
             Assert.Equal(initialState, context.LicenseModel.Status);
         }
@@ -176,7 +205,9 @@ namespace LicenseManagement.EndUser.Test.Tests
         {
             //ARRANGE
             var lic = await testServer.RegisterRandomLicenseAsync(LicenseStatusTitles.Expired);
-            var context = ContextManager.GetContext(lic.Product!.Id!, "VDR_vendor", 4, lic.Computer!.MacAddress!);
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
+            var context = ContextManager.GetContext(lic.Product!.Id!, lic.Product!.Vendor!.Id!, 4, lic.Computer!.MacAddress!);
             var signedLic = await testServer.GetSignedLicenseXmlAsync(lic, 0);
             context.SetLicenseData(signedLic, false);
 
@@ -219,6 +250,8 @@ namespace LicenseManagement.EndUser.Test.Tests
         public async Task OnLaunch_WhenTrialExpired_ShouldRaiseTrialEndedEvent()
         {
             var lic = await licGenerator.SaveNewLicOnDiskAsync(LicenseStatusTitles.InvalidTrial, 0U);
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
             var handler = new LicenseHandlingLaunch(ContextManager.FromLic(lic, 0U), OnTrialEnded: (t) => Assert.True(true));
             handler.HandleLicense();
         }
@@ -235,14 +268,19 @@ namespace LicenseManagement.EndUser.Test.Tests
             var computer = Computers.ForNewLicense();
             var trial = 100U;
             var validDays = 90U;
+
+            // Spoof machine identity to a seed NoLicense computer so ComputerIdValidatorHandler passes.
+            ComputerId.Instance.MachineId = computer.MacAddress;
+            ComputerId.Instance.MachineName = computer.Name;
+
             var context = ContextManager.GetContext(product.Id, product.Vendor.Id, trial, computer.MacAddress, computer.Name, validDays);
 
             //we're installing here
             var handler = new LicenseHandlingInstall(context, null);
             await handler.HandleLicenseAsync();
 
-            //ACT
-            var expectedFile = Path.Combine(Constants.DefaultLicFileRootDir, product.Vendor.Id, product.Id);
+            //ACT — file is written with .lic extension
+            var expectedFile = Path.Combine(Constants.DefaultLicFileRootDir, product.Vendor.Id, product.Id + ".lic");
 
             //ASSERT
             Assert.True(File.Exists(expectedFile));
@@ -262,6 +300,10 @@ namespace LicenseManagement.EndUser.Test.Tests
                 trialDays = 0U;
 
             var lic = await licGenerator.SaveNewLicOnDiskAsync(initialState, trialDays);
+
+            // Spoof machine identity to match the seed computer so ComputerIdValidatorHandler passes.
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
 
             //we're uninstalling here
             var handler = new LicenseHandlingUninstall(ContextManager.FromLic(lic, trialDays));
@@ -290,10 +332,16 @@ namespace LicenseManagement.EndUser.Test.Tests
                 trial = 0;
             }
             var lic = await licGenerator.SaveNewLicOnDiskAsync(title, trial);
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
             var context = ContextManager.FromLic(lic, trial);
             var handler = new LicenseHandlingLaunch(context,
             OnCustomerMustEnterProductKey: () =>
             {
+                // ReceiptExpired uses Basic product; BasicReceipts[0] is full after other test cases
+                // use its seats. BasicReceipts[2] (Qty=3) has no pre-seeded licenses — always available.
+                if (title == LicenseStatusTitles.ReceiptExpired)
+                    return Data.Receipts.BasicReceipts[2].Code;
                 var newRec = testServer.GetReceiptForProduct(lic.Product);
                 return newRec.Code;
             });
@@ -312,10 +360,12 @@ namespace LicenseManagement.EndUser.Test.Tests
         public async Task OnLaunch_PublicKeyFromServerTakesPrecedenceOverPublisherValue()
         {
             var lic = await licGenerator.SaveNewLicOnDiskAsync(LicenseStatusTitles.Valid, 10);
+            ComputerId.Instance.MachineId = lic.Computer.MacAddress;
+            ComputerId.Instance.MachineName = lic.Computer.Name;
 
             var context = ContextManager.FromLic(lic);
 
-            //remove the correct public-key 
+            //remove the correct public-key
             context.PublisherPreferences.PublicKey = "";
             var handler = new LicenseHandlingLaunch(context);
 

@@ -100,8 +100,30 @@ namespace LicenseManagement.EndUser.Signature.Handlers
             }
             else
             {
-                // Public key may have been rotated on the server — refresh by re-fetching the license.
-                SetNext(new ApiGetLicenseHandler());
+                // Signature invalid and license not fresh from server. Distinguish two cases:
+                //   Key rotation: server has a new key that validates the existing file → proceed
+                //   Tampering:    even the fresh server key fails → content was modified → throw
+                // If the server is unreachable, fall back to re-fetching the full license.
+                string previousKey = context.PublisherPreferences.PublicKey;
+                try
+                {
+                    GetPublicKeyFromServer(context);
+                    if (IsSigValid(context))
+                    {
+                        SetNext(new LicenseParsingHandler());
+                        return;
+                    }
+                    // Fresh key still doesn't validate — file was tampered.
+                    SetNextError(context, new CryptographicException("Verification failed: Signature was not valid"));
+                }
+                catch
+                {
+                    // Can't reach server — fall back to re-fetching the full license.
+                    context.PublisherPreferences.PublicKey = previousKey;
+                    try { context.LicenseModel = Models.LicenseModel.FromXml(context.SignedLicense); }
+                    catch { }
+                    SetNext(new ApiGetLicenseHandler());
+                }
             }
         }
 

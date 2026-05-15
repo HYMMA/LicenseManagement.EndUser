@@ -22,8 +22,9 @@ namespace LicenseManagement.EndUser
 
         private static HttpClient BuildClient()
         {
-            var client = new PerHostHttpClientFactory().GetHttpClient(Constants.BaseAddress);
-            client.BaseAddress = new Uri(Constants.BaseAddress);
+            var baseAddress = LicenseHandlingOptions.ServerBaseAddress ?? Constants.BaseAddress;
+            var client = new PerHostHttpClientFactory().GetHttpClient(baseAddress);
+            client.BaseAddress = new Uri(baseAddress);
             return client;
         }
     }

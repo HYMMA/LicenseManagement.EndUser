@@ -36,5 +36,12 @@ namespace LicenseManagement.EndUser
         /// Optional logger for HTTP and chain diagnostics. Default is no-op.
         /// </summary>
         public static ILicenseLogger Logger { get; set; } = NullLicenseLogger.Instance;
+
+        /// <summary>
+        /// Base URL of the license server API, including trailing slash.
+        /// Defaults to <see cref="Constants.BaseAddress"/>. Override in tests or for self-hosted servers.
+        /// Must be set before the first API call — the HTTP client is initialized lazily and caches the value.
+        /// </summary>
+        public static string ServerBaseAddress { get; set; } = Constants.BaseAddress;
     }
 }

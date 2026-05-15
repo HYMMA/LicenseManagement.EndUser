@@ -3,8 +3,8 @@ namespace LicenseManagement.EndUser.Test.Tests
 {
     public class DisposableTest : IDisposable
     {
-      
-        public void Dispose()
+
+        public virtual void Dispose()
         {
 
             //recursively delete everything

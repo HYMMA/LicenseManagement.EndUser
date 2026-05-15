@@ -24,8 +24,8 @@ namespace LicenseManagement.EndUser
         /// <summary>
         /// this value is used during test only
         /// </summary>
-        public string MachineId { get => machineId; private set => machineId = value; }
-        public string MachineName { get => machineName; private set => machineName = value; }
+        public string MachineId { get => machineId; internal set => machineId = value; }
+        public string MachineName { get => machineName; internal set => machineName = value; }
     }
     internal class NullDeviceIdFormatter : IDeviceIdFormatter
     {

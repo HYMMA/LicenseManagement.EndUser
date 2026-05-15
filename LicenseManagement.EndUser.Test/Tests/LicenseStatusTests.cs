@@ -1,4 +1,6 @@
 ﻿using LicenseManagement.EndUser.License;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Test.Data;
 using LicenseManagement.EndUser.Test.Server;
 using Xunit;
 
@@ -27,9 +29,12 @@ namespace LicenseManagement.EndUser.Test.Tests
         [Fact]
         public async Task ShouldDetect_ValidLicense()
         {
-            var lic = await server.RegisterRandomLicenseAsync();
+            // Use PaidLicenses[1] (not [0]) to avoid state pollution from tests that PATCH PaidLicenses[0]
+            var seedLic = Licenses.PaidLicenses[1];
+            var xml = await server.GetSignedLicenseXmlAsync(seedLic, 90);
+            var lic = LicenseModel.FromXml(xml);
             var licenseStatus = new LicenseStatus(lic, DateTime.Now);
-            var context = ContextManager.GetContext(lic.Product.Name, "Hymma", 21, lic.Computer.MacAddress);
+            var context = ContextManager.GetContext(lic.Product.Id, lic.Product.Vendor.Id, 21, lic.Computer.MacAddress);
             var status = licenseStatus.GetLicenseStatus(context.PublisherPreferences);
             Assert.Equal(LicenseStatusTitles.Valid, status);
         }
@@ -47,8 +52,8 @@ namespace LicenseManagement.EndUser.Test.Tests
         [InlineData(1U)]
         public async Task ShouldDetect_ValidTrial(uint trialDays)
         {
-
-            var lic = await server.RegisterRandomLicenseAsync(LicenseStatusTitles.ValidTrial);
+            // Use seedIndex=2 to avoid state pollution from uninstall tests (index 0) and launch tests (index 1).
+            var lic = await server.GetLicenseAsync(LicenseStatusTitles.ValidTrial, seedIndex: 2);
             var licenseStatus = new LicenseStatus(lic, DateTime.Now);
             var context = ContextManager.GetContext(lic.Product.Name, "Hymma", trialDays, lic.Computer.MacAddress);
             var status = licenseStatus.GetLicenseStatus(context.PublisherPreferences);
@@ -61,7 +66,8 @@ namespace LicenseManagement.EndUser.Test.Tests
         [InlineData(210U)]
         public async Task ShouldDetect_InValidTrial(uint trialDays)
         {
-            var lic = await server.RegisterRandomLicenseAsync(LicenseStatusTitles.InvalidTrial);
+            // Use seedIndex=2 to avoid state pollution from uninstall tests (index 0) and launch tests (index 1).
+            var lic = await server.GetLicenseAsync(LicenseStatusTitles.InvalidTrial, seedIndex: 2);
             var licenseStatus = new LicenseStatus(lic, DateTime.Now);
             var context= ContextManager.GetContext(lic.Product.Name, "Hymma", trialDays, lic.Computer.MacAddress);
             var status = licenseStatus.GetLicenseStatus(context.PublisherPreferences);
@@ -71,8 +77,8 @@ namespace LicenseManagement.EndUser.Test.Tests
         [Fact]
         public async Task ShouldDetect_ReceiptExpired()
         {
-
-            var lic = await server.RegisterRandomLicenseAsync(LicenseStatusTitles.ReceiptExpired);
+            // Use seedIndex=1 (License 52) to avoid state pollution from uninstall tests (index 0).
+            var lic = await server.GetLicenseAsync(LicenseStatusTitles.ReceiptExpired, seedIndex: 1);
             var licenseStatus = new LicenseStatus(lic, DateTime.Now);
             var context = ContextManager.GetContext(lic.Product.Name, "Hymma", 0, lic.Computer.MacAddress);
             var status = licenseStatus.GetLicenseStatus(context.PublisherPreferences);

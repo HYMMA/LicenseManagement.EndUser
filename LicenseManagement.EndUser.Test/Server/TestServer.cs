@@ -16,10 +16,27 @@ namespace LicenseManagement.EndUser.Test.Server
     {
         public TestServer()
         {
+            // Redirect the library's shared HttpClient to the local test webapp (must happen before
+            // the first ApiHttp call, since WebApiClient uses a Lazy<HttpClient>).
+            LicenseHandlingOptions.ServerBaseAddress = "http://localhost:7298/api/";
+
             HttpClient = HttpClientFactory.Create(new AuthenticationHandler());
             HttpClient.BaseAddress = new Uri("http://localhost:7298/api/");
             // Reset the computer index at test server construction
             Computers.ResetIndex();
+
+            // Ensure real machine's computer is on the server so install/launch/uninstall tests work.
+            // Returns 201 (created) or 409 (already exists) — both are success states.
+            HttpClient.PostAsJsonAsync("computer", new
+            {
+                MacAddress = ComputerId.Instance.MachineId,
+                Name = ComputerId.Instance.MachineName
+            }).GetAwaiter().GetResult();
+
+            // Fetch and cache the server's current RSA public key so ContextManager always has
+            // the correct key, even after TestSetup regenerates it.
+            try { ContextManager.ServerPublicKey = GetPublicKeyAsync().GetAwaiter().GetResult(); }
+            catch { /* server not running — tests will self-recover via GetPublicKeyFromServer */ }
         }
 
         public HttpClient HttpClient;
@@ -95,9 +112,10 @@ namespace LicenseManagement.EndUser.Test.Server
 
         /// <summary>
         /// Gets a license based on status from seed data, then fetches the signed version from API.
-        /// For statuses that require creating new data (like new trial), uses existing seed data.
+        /// <paramref name="seedIndex"/> selects which seed entry to use (0 = default, 1 = alternate).
+        /// Use index 1 for tests that must not conflict with tests that modify index 0 server-side.
         /// </summary>
-        public async Task<LicenseModel> GetLicenseAsync(LicenseStatusTitles licenseStatusTitles = LicenseStatusTitles.Valid, ProductType type = ProductType.ManyFeatures)
+        public async Task<LicenseModel> GetLicenseAsync(LicenseStatusTitles licenseStatusTitles = LicenseStatusTitles.Valid, ProductType type = ProductType.ManyFeatures, int seedIndex = 0)
         {
             LicenseModel seedLicense;
             int validDays = 90;
@@ -105,38 +123,41 @@ namespace LicenseManagement.EndUser.Test.Server
             switch (licenseStatusTitles)
             {
                 case LicenseStatusTitles.Expired:
-                    seedLicense = Data.Licenses.PaidLicenses[0];
+                    seedLicense = Data.Licenses.PaidLicenses[seedIndex];
                     validDays = 0;
                     break;
 
                 case LicenseStatusTitles.Valid:
-                    seedLicense = Data.Licenses.PaidLicenses[0];
+                    seedLicense = Data.Licenses.PaidLicenses[seedIndex];
                     validDays = 90;
                     break;
 
                 case LicenseStatusTitles.ValidTrial:
-                    seedLicense = Data.Licenses.TrialLicenses[0];
+                    // Use a license whose TrialEndDate is in the future (IDs 21-24)
+                    seedLicense = Data.Licenses.ValidTrialLicenses[seedIndex];
                     validDays = 90;
                     break;
 
                 case LicenseStatusTitles.InvalidTrial:
-                    seedLicense = Data.Licenses.TrialLicenses[0];
-                    validDays = 0;
+                    // Use a license whose TrialEndDate is in the past (IDs 25-28).
+                    // validDays > 0 so the file itself isn't expired — only the trial period is over.
+                    seedLicense = Data.Licenses.InvalidTrialLicenses[seedIndex];
+                    validDays = 90;
                     break;
 
                 case LicenseStatusTitles.ReceiptExpired:
-                    // Use a license with an expired receipt
-                    seedLicense = Data.Licenses.PaidLicenses[0];
-                    validDays = 10;
+                    // Use a license that is linked to an expired receipt (IDs 51-52)
+                    seedLicense = Data.Licenses.ExpiredReceiptLicenses[seedIndex];
+                    validDays = 90;
                     break;
 
                 case LicenseStatusTitles.ReceiptUnregistered:
-                    seedLicense = Data.Licenses.UnregisteredLicenses[0];
+                    seedLicense = Data.Licenses.UnregisteredLicenses[seedIndex];
                     validDays = 90;
                     break;
 
                 default:
-                    seedLicense = Data.Licenses.PaidLicenses[0];
+                    seedLicense = Data.Licenses.PaidLicenses[seedIndex];
                     validDays = 90;
                     break;
             }

@@ -6,6 +6,13 @@ namespace LicenseManagement.EndUser.Test
     internal static class ContextManager
     {
         internal static string ApiKey => "MST_01JAP1JE7FRCJ63FHE5DQJGPY3_xYnvvm6HMOwMWtcGkn3NIrVI34LGTHm1i1tE4qQ7d5Y95iIR3L__vr-m4v6POxnF_JKsM23b-bYpLTM8zLzv3g";
+
+        /// <summary>
+        /// The server's current RSA public key for license signature validation.
+        /// Set by <see cref="Server.TestServer"/> constructor on each test class fixture creation.
+        /// Keeps in sync automatically when TestSetup regenerates keys.
+        /// </summary>
+        internal static string ServerPublicKey { get; set; } = string.Empty;
         internal static LicHandlingContext FromLic(LicenseModel license, uint trial = 0)
         {
             int validDays = 90;
@@ -20,7 +27,7 @@ namespace LicenseManagement.EndUser.Test
         {
             return new LicHandlingContext(new PublisherPreferences(publisher, productId, ApiKey)
             {
-                PublicKey = "<RSAKeyValue><Modulus>vE30e8HszHQbvKdejEwrGMiILh8E1wbciEdZxUVNrVM33WQCfxzdU5CtyviNm1837oCE3tetPq9nrtazSGXgCfiZY023pLdAaH6ExO3UeQv0hZBWJ4jPOhfUcFOGj4bkPH6EgaT4wjBVc+oRzXL00NxcIQTOFgWuqlBxnZ1NGSntdy8+AOiVaZ3tlV8iIO5J1pgt9NA1FS7Eh7icROJmJkDT/ZnfCn9PZdbBm/tT7LVaifi6rm+r1kPQ9Qp0jqX36pqYhES78Hs8nl5h/Ukfw+9J7KyWavey4NpYs1YqXGfKDYvVr1cJiwvsvh8h/rsFj/f/GhLfa9OwbH2bU/ZFrQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>",
+                PublicKey = ServerPublicKey,
                 ValidDays = validDays
             });
         }
