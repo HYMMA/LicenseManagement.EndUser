@@ -51,7 +51,7 @@ namespace LicenseManagement.EndUser.Receipt.Handlers
         public override async Task HandleContextAsync(LicHandlingContext context)
         {
             SetNextHandler(context);
-            await nextHandler.HandleContextAsync(context);
+            await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
         }
     }
 }

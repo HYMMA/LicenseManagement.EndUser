@@ -34,13 +34,13 @@ namespace LicenseManagement.EndUser.License.Handlers
             }
             if (nextHandler != null)
             {
-                nextHandler?.HandleContext(context);
+                nextHandler.HandleContext(context);
             }
         }
 
         private void GetNewLicenseFromServer(LicHandlingContext context)
         {
-            //this line will switch the ApiGetLic to StatusHandler witch switches to ReceiptUnregisteredHandler
+            //this line will switch the ApiGetLic to StatusHandler which switches to ReceiptUnregisteredHandler
             context.ContextEnvironment = HandlerStrategy.Launch;
             SetNext(new ApiGetLicenseHandler());
         }
@@ -50,7 +50,7 @@ namespace LicenseManagement.EndUser.License.Handlers
             try
             {
                 var client = new LicenseApiEndPoint(context.PublisherPreferences.ApiKey);
-                var statusCode = await client.PatchLicenseAsync(GetModel(context));
+                var statusCode = await client.PatchLicenseAsync(GetModel(context)).ConfigureAwait(false);
                 if (statusCode == HttpStatusCode.NoContent)
                 {
                     GetNewLicenseFromServer(context);
@@ -66,7 +66,7 @@ namespace LicenseManagement.EndUser.License.Handlers
             }
             if (nextHandler != null)
             {
-                await nextHandler?.HandleContextAsync(context);
+                await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
             }
         }
 

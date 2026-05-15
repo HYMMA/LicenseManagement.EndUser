@@ -52,21 +52,12 @@ namespace LicenseManagement.EndUser.License.Handlers
 
                 UpdateLicenseData(context, response);
                 SetNextHandler();
-
-                //if no license was found, we have a rare situation where the computer is registered but has no license yet
-
-                /*Since we are calling this only after a post to License endpoint, it is unlikely that a license would not exist at this stage, also calling the post license endpoint from here would cause a loop because that one calls this*/
-
-                //else if(response.StatusCode== HttpStatusCode.NoContent)
-                //{
-                //    SetNextError(new ApiPostLicenseHandler());
-                //}
             }
             catch (System.Exception e)
             {
                 SetNextError(context, e);
             }
-            await nextHandler.HandleContextAsync(context);
+            await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
         }
     }
 }
