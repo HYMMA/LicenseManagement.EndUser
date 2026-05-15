@@ -1,12 +1,12 @@
-using Hymma.Lm.EndUser.License;
-using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Test.Data;
-using Hymma.Lm.EndUser.Test.Utilities;
+using LicenseManagement.EndUser.License;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Test.Data;
+using LicenseManagement.EndUser.Test.Utilities;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 
-namespace Hymma.Lm.EndUser.Test.Server
+namespace LicenseManagement.EndUser.Test.Server
 {
     /// <summary>
     /// Test server client for integration tests.

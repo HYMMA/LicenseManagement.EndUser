@@ -1,8 +1,8 @@
-﻿using Hymma.Lm.EndUser.License;
-using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Test.Server;
+﻿using LicenseManagement.EndUser.License;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Test.Server;
 
-namespace Hymma.Lm.EndUser.Test.Utilities
+namespace LicenseManagement.EndUser.Test.Utilities
 {
     public class LicGenerator
     {

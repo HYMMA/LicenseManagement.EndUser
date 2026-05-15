@@ -1,4 +1,4 @@
-﻿namespace Hymma.Lm.EndUser.Test.Server
+﻿namespace LicenseManagement.EndUser.Test.Server
 {
     public class CollectionNames
     {

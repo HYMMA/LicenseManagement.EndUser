@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace Hymma.Lm.EndUser.Test.Server
+namespace LicenseManagement.EndUser.Test.Server
 {
     class AuthenticationHandler : DelegatingHandler
     {

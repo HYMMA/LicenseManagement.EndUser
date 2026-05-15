@@ -1,15 +1,15 @@
-﻿using Hymma.Lm.EndUser.Extensions;
-using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Test.Server;
+﻿using LicenseManagement.EndUser.Extensions;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Test.Server;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Net;
 using Xunit;
-using Hymma.Lm.EndUser.Test.Data;
-using Hymma.Lm.EndUser.License.EndPoint;
-using Hymma.Lm.EndUser.Time.EndPoint;
-using Hymma.Lm.EndUser.Product.EndPoint;
+using LicenseManagement.EndUser.Test.Data;
+using LicenseManagement.EndUser.License.EndPoint;
+using LicenseManagement.EndUser.Time.EndPoint;
+using LicenseManagement.EndUser.Product.EndPoint;
 
-namespace Hymma.Lm.EndUser.Test.Tests
+namespace LicenseManagement.EndUser.Test.Tests
 
 {
     [Collection(CollectionNames.API_ASYNC)]

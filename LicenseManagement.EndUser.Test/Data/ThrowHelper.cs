@@ -1,4 +1,4 @@
-﻿namespace Hymma.Lm.EndUser.Test.Data
+﻿namespace LicenseManagement.EndUser.Test.Data
 {
     public static class ThrowHelper
     {

@@ -1,8 +1,8 @@
-﻿using Hymma.Lm.EndUser.License;
-using Hymma.Lm.EndUser.Test.Server;
+﻿using LicenseManagement.EndUser.License;
+using LicenseManagement.EndUser.Test.Server;
 using Xunit;
 
-namespace Hymma.Lm.EndUser.Test.Tests
+namespace LicenseManagement.EndUser.Test.Tests
 {
     [Collection(CollectionNames.HANDLER_ASYNC)]
     public class LicenseStatusTests :IClassFixture<TestServer>

@@ -1,6 +1,6 @@
-using Hymma.Lm.EndUser.Models;
+using LicenseManagement.EndUser.Models;
 
-namespace Hymma.Lm.EndUser.Test.Data
+namespace LicenseManagement.EndUser.Test.Data
 {
     /// <summary>
     /// Static test data for receipts matching the SQL seed script in WebApi.Test
