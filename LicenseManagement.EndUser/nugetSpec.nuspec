@@ -2,13 +2,13 @@
 <package>
 	<metadata minClientVersion="2.5">
 		<id>LicenseManagement.EndUser</id>
-		<version>2.0.0</version>
+		<version>3.0.0</version>
 		<authors>HYMMA</authors>
 		<owners>HYMMA</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">MIT</license>
 		<description>End-user SDK for license-management.com platform. Provides license validation, trial management, and activation handling for Windows desktop applications.</description>
-		<releaseNotes>BREAKING CHANGE: Renamed namespace from Hymma.Lm.EndUser to LicenseManagement.EndUser. Package ID changed from Hymma.Lm.EndUser to LicenseManagement.EndUser.</releaseNotes>
+		<releaseNotes>3.0.0: Audit-driven hardening release. Centralized HTTP plumbing (15s timeout, retry-with-backoff for 429/503, Retry-After honoring, Idempotency-Key on POST, X-Correlation-Id, RFC 7807 problem+json error parsing). Hardened XML signature validation (XmlResolver=null, public-key shape check). Typed exceptions instead of base Exception. ILicenseLogger interface for observability. PublisherPreferences.ToString() masks ApiKey. ConfigureAwait(false) applied consistently. Several public infrastructure types are now internal (LicenseValidationHandler, *ApiEndPoint, MainRegistryKeyIn*, NullDeviceIdFormatter). See CHANGELOG.md for full list.</releaseNotes>
 		<projectUrl>https://github.com/HYMMA/LicenseManagement.EndUser</projectUrl>
 		<repository type="git" url="https://github.com/HYMMA/LicenseManagement.EndUser.git" />
 		<readme>README.md</readme>

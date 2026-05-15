@@ -207,6 +207,6 @@
     <Delete Files="$(OutDir)LicenseManagement.EndUser.dll" />
     <Copy SourceFiles="$(TempMergeDir)\LicenseManagement.EndUser.dll" DestinationFiles="$(OutDir)LicenseManagement.EndUser.dll" />
     <RemoveDir Directories="$(TempMergeDir)" />
-    <Delete Files="$(OutDir)DeviceId.dll;$(OutDir)DeviceId.Windows.dll;$(OutDir)DeviceId.Windows.Wmi.dll;$(OutDir) Microsoft.DotNet.PlatformAbstractions.dll" />
+    <Delete Files="$(OutDir)DeviceId.dll;$(OutDir)DeviceId.Windows.dll;$(OutDir)DeviceId.Windows.Wmi.dll;$(OutDir)Microsoft.DotNet.PlatformAbstractions.dll" />
   </Target>
 </Project>
