@@ -22,11 +22,18 @@ jobs:
     - name: Restore NuGet packages
       run: nuget restore LicenseManagement.EndUser/LicenseManagement.EndUser.csproj -PackagesDirectory packages
 
-    - name: Build
+    - name: Build library
       run: msbuild LicenseManagement.EndUser/LicenseManagement.EndUser.csproj /p:Configuration=Release /p:Platform=AnyCPU
 
-    - name: Run Tests
-      run: |
-        nuget restore LicenseManagement.EndUser.Test/LicenseManagement.EndUser.Test.csproj -PackagesDirectory packages
-        msbuild LicenseManagement.EndUser.Test/LicenseManagement.EndUser.Test.csproj /p:Configuration=Release
-      continue-on-error: true
+    - name: Restore test project
+      run: nuget restore LicenseManagement.EndUser.Test/LicenseManagement.EndUser.Test.csproj -PackagesDirectory packages
+
+    - name: Build test project
+      run: msbuild LicenseManagement.EndUser.Test/LicenseManagement.EndUser.Test.csproj /p:Configuration=Release
+
+    # Actually executes the tests (the previous "Run Tests" step only msbuilt them).
+    # Integration tests that depend on a local TestServer at http://localhost:7298/api/
+    # will fail in CI until that server is spun up as part of the workflow or those
+    # tests are filtered/marked. Failures here are real and should not be hidden.
+    - name: Run tests
+      run: dotnet test LicenseManagement.EndUser.Test/LicenseManagement.EndUser.Test.csproj --configuration Release --no-build --logger "console;verbosity=normal"
