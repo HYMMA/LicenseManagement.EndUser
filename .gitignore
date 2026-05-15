@@ -51,3 +51,6 @@ Desktop.ini
 
 # ILRepack temp
 **/ilrepack_temp/
+
+# Local-only docs (audit reports, scratch notes)
+docs/
