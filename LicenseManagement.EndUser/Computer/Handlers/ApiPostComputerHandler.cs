@@ -19,7 +19,7 @@ namespace LicenseManagement.EndUser.Computer
         {
             try
             {
-                var apiClient = new ComputerApiEndPoint(context.PublisherPreferences.ApiKey.ToString());
+                var apiClient = new ComputerApiEndPoint(context.PublisherPreferences.ApiKey);
 
                 var response = apiClient
                     .PostComputer(new Models.PostComputerModel()

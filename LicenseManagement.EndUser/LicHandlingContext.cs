@@ -5,7 +5,8 @@ using System.Threading;
 namespace LicenseManagement.EndUser
 {
     /// <summary>
-    /// a singleton, thread safe context to hold <see cref="LicenseValidationHandler.HandleContextAsync(LicHandlingContext)"/> in memory
+    /// Mutable per-pipeline context passed through the license-handling chain. Not thread-safe —
+    /// use one instance per <see cref="LicenseHandlingStrategy"/> invocation.
     /// </summary>
     public sealed class LicHandlingContext
     {

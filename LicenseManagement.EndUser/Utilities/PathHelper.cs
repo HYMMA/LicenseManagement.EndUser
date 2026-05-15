@@ -1,26 +1,25 @@
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace LicenseManagement.EndUser.Utilities
 {
     internal static class PathHelper
     {
+        // Cache the invalid char set once per process so each call doesn't scan a 40-char array per char.
+        private static readonly HashSet<char> InvalidChars = new HashSet<char>(Path.GetInvalidFileNameChars());
+
         /// <summary>
         /// removes invalid file name characters from file name
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns>string without invalid file name chars</returns>
         internal static string RemoveInvalidFileNameChars(string fileName)
         {
-            var sb = new StringBuilder();
-            var invChars = Path.GetInvalidFileNameChars();
-            for (int i = 0; i < fileName.Length; i++)
+            if (string.IsNullOrEmpty(fileName)) return fileName;
+            var sb = new StringBuilder(fileName.Length);
+            foreach (char c in fileName)
             {
-                if (!invChars.Contains(fileName[i]))
-                {
-                    sb.Append(fileName[i]);
-                }
+                if (!InvalidChars.Contains(c))
+                    sb.Append(c);
             }
             return sb.ToString();
         }
