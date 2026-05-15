@@ -161,7 +161,7 @@
     <Compile Include="LicenseHandlingUninstall.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Time\NtpConnection.cs" />
-    <Compile Include="Utilities\HttpResponseMessageExtensions.cs" />
+    <Compile Include="Utilities\ApiHttp.cs" />
     <Compile Include="Utilities\MainRegistryKeyInHkcu.cs" />
     <Compile Include="Utilities\MainRegistryKeyInHKLM.cs" />
     <Compile Include="Utilities\PathHelper.cs" />
