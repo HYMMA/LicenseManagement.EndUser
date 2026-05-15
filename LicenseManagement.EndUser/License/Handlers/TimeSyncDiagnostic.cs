@@ -11,9 +11,9 @@ namespace LicenseManagement.EndUser.License.Handlers
         internal const double AcceptableDriftHours = 1.0;
     }
 
-    public class TimeSyncDiagnostic
+    internal class TimeSyncDiagnostic
     {
-        public bool IsTimeServiceRunning()
+        internal bool IsTimeServiceRunning()
         {
             using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Service WHERE Name='w32time'"))
             using (var collection = searcher.Get())
@@ -29,7 +29,7 @@ namespace LicenseManagement.EndUser.License.Handlers
             return false;
         }
 
-        public string GetTimeSyncType()
+        internal string GetTimeSyncType()
         {
             using (var reg = new ManagementClass(@"\\.\root\default:StdRegProv"))
             using (ManagementBaseObject inParams = reg.GetMethodParameters("GetStringValue"))
@@ -49,7 +49,7 @@ namespace LicenseManagement.EndUser.License.Handlers
         /// Tries to determine the drift (in hours) between the local clock and an NTP server.
         /// Returns true when the lookup succeeded; the out value is the drift.
         /// </summary>
-        public bool TryGetTimeDriftHours(out double driftHours)
+        internal bool TryGetTimeDriftHours(out double driftHours)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace LicenseManagement.EndUser.License.Handlers
             }
         }
 
-        public void ReportStatus()
+        internal void ReportStatus()
         {
             bool isRunning = IsTimeServiceRunning();
             string syncType = GetTimeSyncType();

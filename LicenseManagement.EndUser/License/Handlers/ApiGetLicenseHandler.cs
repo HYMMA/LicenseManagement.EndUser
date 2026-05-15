@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 namespace LicenseManagement.EndUser.License.Handlers
 {
-    public class ApiGetLicenseHandler : LicenseValidationHandler
+    internal class ApiGetLicenseHandler : LicenseValidationHandler
     {
         public ApiGetLicenseHandler()
         {

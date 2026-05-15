@@ -8,6 +8,10 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+
+    <!-- Sign with the same key as the library so InternalsVisibleTo can grant access to internals. -->
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\LicenseManagement.EndUser\HymmaLm.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

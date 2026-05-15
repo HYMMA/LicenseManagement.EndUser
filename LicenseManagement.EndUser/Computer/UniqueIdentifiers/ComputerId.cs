@@ -27,11 +27,11 @@ namespace LicenseManagement.EndUser
         public string MachineId { get => machineId; private set => machineId = value; }
         public string MachineName { get => machineName; private set => machineName = value; }
     }
-    public class NullDeviceIdFormatter : IDeviceIdFormatter
+    internal class NullDeviceIdFormatter : IDeviceIdFormatter
     {
         private readonly string _key;
 
-        public NullDeviceIdFormatter(string key)
+        internal NullDeviceIdFormatter(string key)
         {
             _key = key;
         }

@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace LicenseManagement.EndUser
 {
-    public class ComputerApiEndPoint
+    internal class ComputerApiEndPoint
     {
         private const string Path = "computer";
         private readonly string _apiKey;
 
-        public ComputerApiEndPoint(string apiKey)
+        internal ComputerApiEndPoint(string apiKey)
         {
             _apiKey = apiKey;
         }
@@ -34,26 +34,26 @@ namespace LicenseManagement.EndUser
         /// Posts a new computer to the license server.
         /// </summary>
         /// <returns><see cref="HttpStatusCode.Created"/> on success or <see cref="HttpStatusCode.Conflict"/> if the computer already exists.</returns>
-        public HttpStatusCode PostComputer(PostComputerModel model)
+        internal HttpStatusCode PostComputer(PostComputerModel model)
         {
             Validate(model.MacAddress, nameof(model.MacAddress));
             Validate(model.Name, nameof(model.Name));
             return ApiHttp.SendForStatus(HttpMethod.Post, Path, _apiKey, model, IdempotencyKey(model));
         }
 
-        public Task<HttpStatusCode> PostComputerAsync(PostComputerModel model, CancellationToken cancellationToken = default(CancellationToken))
+        internal Task<HttpStatusCode> PostComputerAsync(PostComputerModel model, CancellationToken cancellationToken = default(CancellationToken))
         {
             Validate(model.MacAddress, nameof(model.MacAddress));
             Validate(model.Name, nameof(model.Name));
             return ApiHttp.SendForStatusAsync(HttpMethod.Post, Path, _apiKey, model, IdempotencyKey(model), cancellationToken);
         }
 
-        public ComputerModel GetComputer()
+        internal ComputerModel GetComputer()
         {
             return ApiHttp.SendJson<ComputerModel>(HttpMethod.Get, BuildGetPath(), _apiKey);
         }
 
-        public Task<ComputerModel> GetComputerAsync(CancellationToken cancellationToken = default(CancellationToken))
+        internal Task<ComputerModel> GetComputerAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return ApiHttp.SendJsonAsync<ComputerModel>(HttpMethod.Get, BuildGetPath(), _apiKey, cancellationToken: cancellationToken);
         }

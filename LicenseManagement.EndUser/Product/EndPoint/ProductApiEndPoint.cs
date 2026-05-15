@@ -12,21 +12,21 @@ namespace LicenseManagement.EndUser.Product.EndPoint
     /// <summary>
     /// Wraps the /product endpoint.
     /// </summary>
-    public class ProductApiEndPoint
+    internal class ProductApiEndPoint
     {
         private const string Path = "product";
 
         private readonly string _apiKey;
 
-        public ProductApiEndPoint(string apiKey)
+        internal ProductApiEndPoint(string apiKey)
         {
             _apiKey = apiKey;
         }
 
-        public ProductModel GetProduct(string id)
+        internal ProductModel GetProduct(string id)
             => ApiHttp.SendJson<ProductModel>(HttpMethod.Get, BuildGetPath(id), _apiKey);
 
-        public Task<ProductModel> GetProductAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
+        internal Task<ProductModel> GetProductAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
             => ApiHttp.SendJsonAsync<ProductModel>(HttpMethod.Get, BuildGetPath(id), _apiKey, cancellationToken: cancellationToken);
 
         private static string BuildGetPath(string id)

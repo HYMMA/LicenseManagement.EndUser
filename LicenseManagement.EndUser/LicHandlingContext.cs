@@ -48,12 +48,11 @@ namespace LicenseManagement.EndUser
         public bool IsLicenseFreshOutOfServer => _isFromServer;
 
         /// <summary>
-        /// sets the content of <see cref="SignedLicense"/>
+        /// Sets the content of <see cref="SignedLicense"/>. Test-only seam — production code uses
+        /// the chain handlers (<c>ApiGetLicenseHandler</c>, <c>LicenseHandlingLaunch.SetNextHandler</c>).
+        /// Exposed to the test project via <c>InternalsVisibleTo</c> in AssemblyInfo.cs.
         /// </summary>
-        /// <param name="signedLic"></param>
-        /// <param name="isFromServer">true if the data is coming from server and false if its read from lic file</param>
-        ///<remarks>for testing only</remarks>
-        public void SetLicenseData(string signedLic, bool isFromServer)
+        internal void SetLicenseData(string signedLic, bool isFromServer)
         {
             _signedLicense = signedLic;
             _isFromServer = isFromServer;

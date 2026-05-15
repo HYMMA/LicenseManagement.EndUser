@@ -10,34 +10,34 @@ using System.Threading.Tasks;
 
 namespace LicenseManagement.EndUser.License.EndPoint
 {
-    public class LicenseApiEndPoint
+    internal class LicenseApiEndPoint
     {
         private const string Path = "license";
         private static readonly HttpMethod Patch = new HttpMethod("PATCH");
 
         private readonly string _apiKey;
 
-        public LicenseApiEndPoint(string apiKey)
+        internal LicenseApiEndPoint(string apiKey)
         {
             _apiKey = apiKey;
         }
 
-        public HttpStatusCode PostLicense(PostLicenseModel model)
+        internal HttpStatusCode PostLicense(PostLicenseModel model)
             => ApiHttp.SendForStatus(HttpMethod.Post, Path, _apiKey, model, IdempotencyKeyForPost(model));
 
-        public Task<HttpStatusCode> PostLicenseAsync(PostLicenseModel model, CancellationToken cancellationToken = default(CancellationToken))
+        internal Task<HttpStatusCode> PostLicenseAsync(PostLicenseModel model, CancellationToken cancellationToken = default(CancellationToken))
             => ApiHttp.SendForStatusAsync(HttpMethod.Post, Path, _apiKey, model, IdempotencyKeyForPost(model), cancellationToken);
 
-        public HttpStatusCode PatchLicense(PatchLicenseModel model)
+        internal HttpStatusCode PatchLicense(PatchLicenseModel model)
             => ApiHttp.SendForStatus(Patch, Path, _apiKey, model);
 
-        public Task<HttpStatusCode> PatchLicenseAsync(PatchLicenseModel model, CancellationToken cancellationToken = default(CancellationToken))
+        internal Task<HttpStatusCode> PatchLicenseAsync(PatchLicenseModel model, CancellationToken cancellationToken = default(CancellationToken))
             => ApiHttp.SendForStatusAsync(Patch, Path, _apiKey, model, cancellationToken: cancellationToken);
 
-        public string GetLicense(string computer, string product, List<string> features, uint validDays)
+        internal string GetLicense(string computer, string product, List<string> features, uint validDays)
             => ApiHttp.GetString(BuildGetPath(computer, product, features, validDays), _apiKey);
 
-        public Task<string> GetLicenseAsync(string computer, string product, List<string> features, uint validDays, CancellationToken cancellationToken = default(CancellationToken))
+        internal Task<string> GetLicenseAsync(string computer, string product, List<string> features, uint validDays, CancellationToken cancellationToken = default(CancellationToken))
             => ApiHttp.GetStringAsync(BuildGetPath(computer, product, features, validDays), _apiKey, cancellationToken);
 
         private static string BuildGetPath(string computer, string product, List<string> features, uint validDays)
