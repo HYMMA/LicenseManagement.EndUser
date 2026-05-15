@@ -5,6 +5,9 @@ using LicenseManagement.EndUser.Registrars;
 using LicenseManagement.EndUser.Test.Data;
 using LicenseManagement.EndUser.Test.Server;
 using LicenseManagement.EndUser.Test.Utilities;
+using System;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text.Json.Serialization.Metadata;
@@ -355,6 +358,85 @@ namespace LicenseManagement.EndUser.Test.Tests
             var actual = statusHandler.GetLicenseStatus(context.PublisherPreferences);
             Assert.Equal(LicenseStatusTitles.Valid, actual);
         }
+
+        // ── Uninstall identity-source guards ─────────────────────────────────────────────
+        // These tests enforce the invariant: uninstall ALWAYS uses the live hardware ID
+        // (ComputerId.Instance.MachineId) and NEVER the computer ID stored in the lic file.
+        // A lic file copied from another machine must not let that machine's seat be unregistered.
+
+        [Fact]
+        public async Task OnUninstall_ShouldUseHardwareMachineId_NotLicFileComputerId()
+        {
+            // Arrange — write Computer A's lic file to disk (simulates a shared / copied lic file).
+            var licA = await testServer.GetLicenseAsync(LicenseStatusTitles.Valid, seedIndex: 0);
+            var contextA = ContextManager.FromLic(licA);
+            contextA.SetLicenseData(await testServer.GetSignedLicenseXmlAsync(licA), false);
+            new LicenseRegister(contextA).TryWrite();
+
+            // Arrange — Computer B: a fresh machine with no prior license for this product.
+            var bytes = Guid.NewGuid().ToByteArray();
+            var bMac = $"{bytes[0]:X2}:{bytes[1]:X2}:{bytes[2]:X2}:{bytes[3]:X2}:{bytes[4]:X2}:{bytes[5]:X2}";
+            var compResp = await testServer.HttpClient.PostAsJsonAsync("computer", new { MacAddress = bMac, Name = "UninstallGuardB" });
+            compResp.EnsureSuccessStatusCode();
+            var computerB = await testServer.HttpClient.GetFromJsonAsync<ComputerModel>(compResp.Headers.Location!);
+
+            // Set hardware identity to Computer B — this machine is the one running the uninstall.
+            ComputerId.Instance.MachineId = computerB!.MacAddress;
+            ComputerId.Instance.MachineName = computerB.Name;
+
+            // Context carries only routing data (productId / vendorId).
+            // Machine identity is never stored in context — it is always read from ComputerId.Instance at runtime.
+            var context = ContextManager.GetContext(licA.Product!.Id, licA.Product!.Vendor!.Id, 10);
+
+            // Act
+            var handler = new LicenseHandlingUninstall(context);
+            await handler.HandleLicenseAsync();
+
+            // Assert — Computer B now has a license record on the server.
+            // If the lic file's computer ID (A) had been used instead, B would have no record at all.
+            string? licBXml = null;
+            try
+            {
+                licBXml = await testServer.HttpClient.GetStringAsync(
+                    $"license?computer={computerB.Id}&product={licA.Product!.Id}");
+            }
+            catch (HttpRequestException) { /* 404 = B has no license — hardware ID was NOT used (broken) */ }
+
+            Assert.NotNull(licBXml);
+            Assert.Null(LicenseModel.FromXml(licBXml!).Receipt); // B's receipt was unregistered
+        }
+
+        [Fact]
+        public async Task OnUninstall_WhenNoLicFileOnDisk_ShouldSucceedViaApiChain()
+        {
+            // DisposableTest.Dispose() wipes the lic directory after every test,
+            // so the disk is guaranteed clean here — no lic file exists.
+            var bytes = Guid.NewGuid().ToByteArray();
+            var mac = $"{bytes[0]:X2}:{bytes[1]:X2}:{bytes[2]:X2}:{bytes[3]:X2}:{bytes[4]:X2}:{bytes[5]:X2}";
+            var compResp = await testServer.HttpClient.PostAsJsonAsync("computer", new { MacAddress = mac, Name = "NoFileUninstallTest" });
+            compResp.EnsureSuccessStatusCode();
+            var comp = await testServer.HttpClient.GetFromJsonAsync<ComputerModel>(compResp.Headers.Location!);
+
+            var product = testServer.GetProduct(ProductType.OneFeature);
+            ComputerId.Instance.MachineId = comp!.MacAddress;
+            ComputerId.Instance.MachineName = comp.Name;
+
+            // No SetLicenseData, no TryWrite — zero lic file on disk.
+            var context = ContextManager.GetContext(product.Id, product.Vendor!.Id, 10);
+
+            // Act — must not throw even with no lic file present.
+            // If the chain tried to read from disk it would fail here.
+            var handler = new LicenseHandlingUninstall(context);
+            await handler.HandleLicenseAsync();
+
+            // Assert — a license was created on the server via POST and then unregistered,
+            // confirming the chain operates entirely through the API.
+            var licXml = await testServer.HttpClient.GetStringAsync(
+                $"license?computer={comp.Id}&product={product.Id}");
+            Assert.Null(LicenseModel.FromXml(licXml).Receipt);
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────────
 
        [Fact]
         public async Task OnLaunch_PublicKeyFromServerTakesPrecedenceOverPublisherValue()
