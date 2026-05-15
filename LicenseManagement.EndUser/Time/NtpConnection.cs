@@ -1,15 +1,9 @@
-using LicenseManagement.EndUser.Time;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LicenseManagement.EndUser.Time
 {
-
     /// <summary>
     ///     Represents a connection that provides information from a ntp-server.
     /// </summary>
@@ -39,34 +33,24 @@ namespace LicenseManagement.EndUser.Time
             var ntpData = new byte[48];
             ntpData[0] = 0x1B;
 
-            var addresses = Dns.GetHostEntry(_server).AddressList;
-            var ipEndPoint = new IPEndPoint(addresses[0], 123);
-            var socket =
-                new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) { ReceiveTimeout = 3000 };
+            var addresses = Dns.GetHostAddresses(_server);
+            if (addresses == null || addresses.Length == 0)
+                throw new SocketException((int)SocketError.HostNotFound);
 
-            try
+            var ipEndPoint = new IPEndPoint(addresses[0], 123);
+
+            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) { ReceiveTimeout = 3000, SendTimeout = 3000 })
             {
                 socket.Connect(ipEndPoint);
                 socket.Send(ntpData);
                 socket.Receive(ntpData);
-                socket.Close();
-
-                var intPart = ((ulong)ntpData[40] << 24) | ((ulong)ntpData[41] << 16) | ((ulong)ntpData[42] << 8) | ntpData[43];
-                var fractPart = ((ulong)ntpData[44] << 24) | ((ulong)ntpData[45] << 16) | ((ulong)ntpData[46] << 8) | ntpData[47];
-
-                var milliseconds = intPart * 1000 + fractPart * 1000 / 0x100000000L;
-                var networkDateTime = new DateTime(1900, 1, 1).AddMilliseconds((long)milliseconds);
-
-                return networkDateTime;
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                socket.Close();
-            }
+
+            var intPart = ((ulong)ntpData[40] << 24) | ((ulong)ntpData[41] << 16) | ((ulong)ntpData[42] << 8) | ntpData[43];
+            var fractPart = ((ulong)ntpData[44] << 24) | ((ulong)ntpData[45] << 16) | ((ulong)ntpData[46] << 8) | ntpData[47];
+
+            var milliseconds = intPart * 1000 + fractPart * 1000 / 0x100000000L;
+            return new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds((long)milliseconds);
         }
     }
 }
