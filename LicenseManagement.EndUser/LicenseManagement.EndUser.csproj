@@ -88,6 +88,10 @@
     <Compile Include="AuthorizedRequest.cs" />
     <Compile Include="Diagnostics\ILicenseLogger.cs" />
     <Compile Include="Exceptions\CouldNotPatchLicenseWithReceiptException.cs" />
+    <Compile Include="Exceptions\InvalidApiKeyException.cs" />
+    <Compile Include="Exceptions\NetworkUnavailableException.cs" />
+    <Compile Include="Exceptions\ProblemDetailsException.cs" />
+    <Compile Include="Exceptions\RateLimitException.cs" />
     <Compile Include="Exceptions\ReceiptNotAvailableException.cs" />
     <Compile Include="LicenseHandlingOptions.cs" />
     <Compile Include="LicenseValidationHandler.cs" />
