@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.2] - 2026-05-15
+
+### Fixed
+- `LicenseHandlingUninstall`: reverted the 3.0.1 disk-read approach and restored the original
+  server chain (`ApiGetComputerHandler` → `ApiGetProductHandler` → `ApiPostLicenseHandler` →
+  `ApiGetLicenseHandler`). The disk-read approach broke two invariants: (1) if the license file
+  was deleted the computer could never be unregistered; (2) a license file shared between machines
+  could unregister the wrong seat because computer identity was read from the file instead of from
+  the live hardware `ComputerId.Instance.MachineId`. The server chain always resolves identity from
+  hardware, handles a missing file gracefully (POST returns 409 = license exists → GET it), and
+  writes the updated unregistered license back to disk via `LastLicenseHandler`.
+
 ## [3.0.1] - 2026-05-15
 
 ### Fixed

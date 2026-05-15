@@ -17,19 +17,13 @@ namespace LicenseManagement.EndUser
 
         void SetNextHandler()
         {
-            // Read the existing on-disk license to get its ID for the server-side PATCH.
-            // Unlike install/launch, uninstall does not need to re-register the computer.
-            var register = new Registrars.LicenseRegister(HandlingContext);
-            if (register.TryRead(out string signedLic))
-            {
-                HandlingContext.SetLicenseData(signedLic, false);
-                NextHandler = new Signature.Handlers.LicenseSignatureValidationHandler();
-            }
-            else
-            {
-                HandlingContext.Exception = new Exceptions.CouldNotReadLicenseFromDiskException();
-                NextHandler = new ErrorHandler();
-            }
+            // Always resolve machine identity from hardware (ComputerId.Instance.MachineId),
+            // never from the license file. This prevents a shared or deleted .lic file from
+            // letting one machine unregister another's seat. ApiGetComputerHandler GETs the
+            // server-side Computer record by the live hardware ID, then the chain POSTs the
+            // license (409 = already exists → fetch it), unregisters the receipt, and writes
+            // the updated license back to disk via LastLicenseHandler.
+            NextHandler = new ApiGetComputerHandler();
         }
         public override void HandleLicense()
         {
