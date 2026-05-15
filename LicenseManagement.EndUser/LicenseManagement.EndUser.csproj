@@ -86,8 +86,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizedRequest.cs" />
+    <Compile Include="Diagnostics\ILicenseLogger.cs" />
     <Compile Include="Exceptions\CouldNotPatchLicenseWithReceiptException.cs" />
     <Compile Include="Exceptions\ReceiptNotAvailableException.cs" />
+    <Compile Include="LicenseHandlingOptions.cs" />
     <Compile Include="LicenseValidationHandler.cs" />
     <Compile Include="License\Handlers\TimeSyncDiagnostic.cs" />
     <Compile Include="License\Handlers\ValidLicenseHandler.cs" />

@@ -48,54 +48,39 @@ namespace LicenseManagement.EndUser.License.Handlers
         }
         public override async Task HandleContextAsync(LicHandlingContext context)
         {
-            //var _apiClient = new DateTimeApiEndPoint(context.PublisherPreferences.ApiKey);
-            //DateTime now;
-            //try
-            //{
-            //    //try to get the date time from our servers
-            //    now = await _apiClient.GetCurrentUtcTimeAsync();
-            //}
-            //catch (Exception)
-            //{
-            //    //fall back to user's computer if something went wrong
-            //    now = DateTime.UtcNow;
-            //}
             SetNextHandler(context, GetCurrentTime(context));
-            await nextHandler.HandleContextAsync(context);
+            await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
         }
 
         public DateTime GetCurrentTime(LicHandlingContext context)
         {
             var diagnosis = new TimeSyncDiagnostic();
-            bool isRunning = diagnosis.IsTimeServiceRunning();
-            string syncType = diagnosis.GetTimeSyncType();
 
-            if (isRunning && syncType == "NTP")
+            // If the local clock is being kept in sync via NTP and the drift from a public NTP server
+            // is small (< AcceptableDriftHours), trust the local clock. This is the cheap, common path.
+            if (diagnosis.IsTimeServiceRunning()
+                && diagnosis.GetTimeSyncType() == TimeSyncConstants.SyncTypeNtp
+                && diagnosis.TryGetTimeDriftHours(out double drift)
+                && Math.Abs(drift) < TimeSyncConstants.AcceptableDriftHours)
             {
-                double drift = diagnosis.TryGetTimeDriftHours();
-                if (Math.Abs(drift) < 1)
-                {
-                    return DateTime.UtcNow;
-                }
+                return DateTime.UtcNow;
             }
 
-            //user has modifed their computer time by more than 10 hours
+            // The user may have manually shifted their clock. Fall back to a public NTP server,
+            // then to our own time endpoint, then finally to the local clock as a last resort.
             try
             {
-                //gets ntp from pool.ntp.org    
                 return NtpConnection.Utc();
             }
             catch (Exception)
             {
                 try
                 {
-                    var _apiClient = new DateTimeApiEndPoint(context.PublisherPreferences.ApiKey);
-                    var now = _apiClient.GetCurrentUtcTime();
-                    return now;
+                    var apiClient = new DateTimeApiEndPoint(context.PublisherPreferences.ApiKey);
+                    return apiClient.GetCurrentUtcTime();
                 }
                 catch (Exception)
                 {
-                    //fall back to user's computer if something went wrong
                     return DateTime.UtcNow;
                 }
             }
