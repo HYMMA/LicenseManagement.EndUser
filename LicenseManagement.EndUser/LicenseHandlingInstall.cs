@@ -3,7 +3,6 @@ using LicenseManagement.EndUser.Exceptions;
 using LicenseManagement.EndUser.Models;
 using LicenseManagement.EndUser.Registrars;
 using System;
-using System.Reflection.Emit;
 using System.Threading.Tasks;
 
 namespace LicenseManagement.EndUser

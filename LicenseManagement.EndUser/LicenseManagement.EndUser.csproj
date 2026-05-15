@@ -86,8 +86,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizedRequest.cs" />
+    <Compile Include="Diagnostics\ILicenseLogger.cs" />
     <Compile Include="Exceptions\CouldNotPatchLicenseWithReceiptException.cs" />
+    <Compile Include="Exceptions\InvalidApiKeyException.cs" />
+    <Compile Include="Exceptions\NetworkUnavailableException.cs" />
+    <Compile Include="Exceptions\ProblemDetailsException.cs" />
+    <Compile Include="Exceptions\RateLimitException.cs" />
     <Compile Include="Exceptions\ReceiptNotAvailableException.cs" />
+    <Compile Include="LicenseHandlingOptions.cs" />
     <Compile Include="LicenseValidationHandler.cs" />
     <Compile Include="License\Handlers\TimeSyncDiagnostic.cs" />
     <Compile Include="License\Handlers\ValidLicenseHandler.cs" />
@@ -155,7 +161,7 @@
     <Compile Include="LicenseHandlingUninstall.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Time\NtpConnection.cs" />
-    <Compile Include="Utilities\HttpResponseMessageExtensions.cs" />
+    <Compile Include="Utilities\ApiHttp.cs" />
     <Compile Include="Utilities\MainRegistryKeyInHkcu.cs" />
     <Compile Include="Utilities\MainRegistryKeyInHKLM.cs" />
     <Compile Include="Utilities\PathHelper.cs" />
@@ -207,6 +213,6 @@
     <Delete Files="$(OutDir)LicenseManagement.EndUser.dll" />
     <Copy SourceFiles="$(TempMergeDir)\LicenseManagement.EndUser.dll" DestinationFiles="$(OutDir)LicenseManagement.EndUser.dll" />
     <RemoveDir Directories="$(TempMergeDir)" />
-    <Delete Files="$(OutDir)DeviceId.dll;$(OutDir)DeviceId.Windows.dll;$(OutDir)DeviceId.Windows.Wmi.dll;$(OutDir) Microsoft.DotNet.PlatformAbstractions.dll" />
+    <Delete Files="$(OutDir)DeviceId.dll;$(OutDir)DeviceId.Windows.dll;$(OutDir)DeviceId.Windows.Wmi.dll;$(OutDir)Microsoft.DotNet.PlatformAbstractions.dll" />
   </Target>
 </Project>

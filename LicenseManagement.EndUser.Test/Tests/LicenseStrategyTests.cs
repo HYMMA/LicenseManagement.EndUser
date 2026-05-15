@@ -1,10 +1,10 @@
-﻿using Hymma.Lm.EndUser.Exceptions;
-using Hymma.Lm.EndUser.License;
-using Hymma.Lm.EndUser.Models;
-using Hymma.Lm.EndUser.Registrars;
-using Hymma.Lm.EndUser.Test.Data;
-using Hymma.Lm.EndUser.Test.Server;
-using Hymma.Lm.EndUser.Test.Utilities;
+﻿using LicenseManagement.EndUser.Exceptions;
+using LicenseManagement.EndUser.License;
+using LicenseManagement.EndUser.Models;
+using LicenseManagement.EndUser.Registrars;
+using LicenseManagement.EndUser.Test.Data;
+using LicenseManagement.EndUser.Test.Server;
+using LicenseManagement.EndUser.Test.Utilities;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text.Json.Serialization.Metadata;
@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.Schema;
 using Xunit;
 
-namespace Hymma.Lm.EndUser.Test.Tests
+namespace LicenseManagement.EndUser.Test.Tests
 {
     public class LicenseStrategyTests : DisposableTest, IClassFixture<TestServer>
     {

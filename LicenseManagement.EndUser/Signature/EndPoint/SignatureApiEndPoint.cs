@@ -1,64 +1,26 @@
-using System;
-using System.IO;
-using System.Net.Http;
+using LicenseManagement.EndUser.Utilities;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LicenseManagement.EndUser.Signature.EndPoint
 {
     /// <summary>
-    /// api endpoints helper class to deal with public key and signatures
+    /// Wraps the /signingKeys endpoint that serves the publisher's RSA public key (XML format).
     /// </summary>
     internal class SignatureApiEndPoint
     {
-        private string apiKey;
+        private const string Path = "signingKeys/.xml";
+        private readonly string _apiKey;
 
         internal SignatureApiEndPoint(string apiKey)
         {
-            this.apiKey = apiKey;
+            _apiKey = apiKey;
         }
 
-        /// <summary>
-        /// get the public key of the RSA key used to sign a license file
-        /// </summary>
-        /// <returns></returns>
         internal string GetPublicKey()
-        {
-            string result = string.Empty;
+            => ApiHttp.GetString(Path, _apiKey);
 
-            //ms.Seek(0, SeekOrigin.Begin);
-            using (var request = new AuthorizedRequest(HttpMethod.Get, "signingKeys/.xml", apiKey))
-            {
-                using (var response = WebApiClient.HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead).GetAwaiter().GetResult())
-                {
-                    response.EnsureSuccessStatusCode();
-                    using (var stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult())
-                    {
-                        TextReader reader = new StreamReader(stream);
-                        result = reader.ReadToEnd();
-                    }
-                }
-            }
-            return result;
-        }
-
-        internal async Task<string> GetPublicKeyAsync()
-        {
-            string result = string.Empty;
-
-            //ms.Seek(0, SeekOrigin.Begin);
-            using (var request = new AuthorizedRequest(HttpMethod.Get, "signingKeys/.xml", apiKey))
-            {
-                using (var response = await WebApiClient.HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead))
-                {
-                    response.EnsureSuccessStatusCode();
-                    using (var stream = await response.Content.ReadAsStreamAsync())
-                    {
-                        TextReader reader = new StreamReader(stream);
-                        result = reader.ReadToEnd();
-                    }
-                }
-            }
-            return result;
-        }
+        internal Task<string> GetPublicKeyAsync(CancellationToken cancellationToken = default(CancellationToken))
+            => ApiHttp.GetStringAsync(Path, _apiKey, cancellationToken);
     }
 }

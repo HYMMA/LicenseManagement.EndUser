@@ -5,7 +5,8 @@ using System.Threading;
 namespace LicenseManagement.EndUser
 {
     /// <summary>
-    /// a singleton, thread safe context to hold <see cref="LicenseValidationHandler.HandleContextAsync(LicHandlingContext)"/> in memory
+    /// Mutable per-pipeline context passed through the license-handling chain. Not thread-safe —
+    /// use one instance per <see cref="LicenseHandlingStrategy"/> invocation.
     /// </summary>
     public sealed class LicHandlingContext
     {
@@ -47,12 +48,11 @@ namespace LicenseManagement.EndUser
         public bool IsLicenseFreshOutOfServer => _isFromServer;
 
         /// <summary>
-        /// sets the content of <see cref="SignedLicense"/>
+        /// Sets the content of <see cref="SignedLicense"/>. Test-only seam — production code uses
+        /// the chain handlers (<c>ApiGetLicenseHandler</c>, <c>LicenseHandlingLaunch.SetNextHandler</c>).
+        /// Exposed to the test project via <c>InternalsVisibleTo</c> in AssemblyInfo.cs.
         /// </summary>
-        /// <param name="signedLic"></param>
-        /// <param name="isFromServer">true if the data is coming from server and false if its read from lic file</param>
-        ///<remarks>for testing only</remarks>
-        public void SetLicenseData(string signedLic, bool isFromServer)
+        internal void SetLicenseData(string signedLic, bool isFromServer)
         {
             _signedLicense = signedLic;
             _isFromServer = isFromServer;

@@ -14,7 +14,18 @@ namespace LicenseManagement.EndUser.Registrars
             this.context = context;
         }
 
-        static string GetDefaultFullFileName(string subFolderName, string fileName) => Path.Combine(Constants.DefaultLicFileRootDir, subFolderName, fileName + ".lic");
+        static string GetDefaultFullFileName(string subFolderName, string fileName)
+        {
+            // Defence in depth: even though PathHelper.RemoveInvalidFileNameChars strips most
+            // dangerous chars, verify the resolved path is contained inside DefaultLicFileRootDir.
+            // A malicious ProductId of e.g. "..\..\Windows\System32\anything" must NOT escape the root.
+            var combined = Path.Combine(Constants.DefaultLicFileRootDir, subFolderName, fileName + ".lic");
+            var fullCombined = Path.GetFullPath(combined);
+            var fullRoot = Path.GetFullPath(Constants.DefaultLicFileRootDir);
+            if (!fullCombined.StartsWith(fullRoot, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("Resolved license file path escapes the configured root directory.");
+            return fullCombined;
+        }
         /// <summary>
         /// this method is public for testing only, this method will return the default full file name of a license file which is based on the product name and the publisher id
         /// </summary>

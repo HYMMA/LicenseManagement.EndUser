@@ -1,6 +1,6 @@
-﻿using Hymma.Lm.EndUser.Registrars;
+﻿using LicenseManagement.EndUser.Registrars;
 using Xunit;
-namespace Hymma.Lm.EndUser.Test.Tests
+namespace LicenseManagement.EndUser.Test.Tests
 {
 
     public class InputOutputTests : DisposableTest

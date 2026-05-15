@@ -5,11 +5,17 @@ using System.Collections.Generic;
 namespace LicenseManagement.EndUser.Utilities
 {
     /// <summary>
-    /// reads and writes to HKLM and fallbacks to HKCU 
+    /// reads and writes to HKLM and fallbacks to HKCU
     /// </summary>
-    public static class MainRegistryKeyInHKLM
+    /// <remarks>
+    /// HKLM writes require the calling process to be elevated. WiX deferred custom actions run impersonated
+    /// as the installing user by default unless `Impersonate="no"` is set on the CustomAction element, so
+    /// HKLM writes from a CA will fail and the value will only end up under HKCU. Document the privilege
+    /// requirement on the consumer side.
+    /// </remarks>
+    internal static class MainRegistryKeyInHKLM
     {
-        public static bool TryReadFrom(string subKey, string name, out string content)
+        internal static bool TryReadFrom(string subKey, string name, out string content)
         {
             var key = Registry.LocalMachine.OpenSubKey(Constants.RegKey)?.OpenSubKey(subKey);
             if (key ==null)
@@ -27,7 +33,7 @@ namespace LicenseManagement.EndUser.Utilities
             }
         }
 
-        public static bool TryWriteTo(string subKey, KeyValuePair<string, string> pair)
+        internal static bool TryWriteTo(string subKey, KeyValuePair<string, string> pair)
         {
             //write to HKCU first
             var innerWroteToHKCU = MainRegistryKeyInHkcu.TryWriteTo(subKey, pair);
@@ -45,11 +51,14 @@ namespace LicenseManagement.EndUser.Utilities
                 }
                 return TryReadFrom(subkey, pair.Key, out _);
             }
-            catch (Exception)
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            catch (System.Security.SecurityException)
             {
                 return false;
             }
         }
     }
-
 }

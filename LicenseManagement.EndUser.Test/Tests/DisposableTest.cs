@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-namespace Hymma.Lm.EndUser.Test.Tests
+namespace LicenseManagement.EndUser.Test.Tests
 {
     public class DisposableTest : IDisposable
     {

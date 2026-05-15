@@ -30,7 +30,7 @@ namespace LicenseManagement.EndUser
         public override async Task HandleLicenseAsync()
         {
             SetNextHandler();
-            await NextHandler.HandleContextAsync(HandlingContext);
+            await NextHandler.HandleContextAsync(HandlingContext).ConfigureAwait(false);
         }
     }
 }

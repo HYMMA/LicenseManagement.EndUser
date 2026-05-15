@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace LicenseManagement.EndUser.Utilities
 {
-    public class MainRegistryKeyInHkcu
+    internal static class MainRegistryKeyInHkcu
     {
-        public static bool TryReadFrom(string subKey, string name, out string content)
+        internal static bool TryReadFrom(string subKey, string name, out string content)
         {
             var key = Registry.CurrentUser.OpenSubKey(Constants.RegKey)?.OpenSubKey(subKey);
             if (key == null)
@@ -30,7 +30,7 @@ namespace LicenseManagement.EndUser.Utilities
             }
         }
 
-        public static bool TryWriteTo(string subKey, KeyValuePair<string, string> pair)
+        internal static bool TryWriteTo(string subKey, KeyValuePair<string, string> pair)
         {
             try
             {

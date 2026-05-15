@@ -34,6 +34,6 @@ namespace LicenseManagement.EndUser
         /// this is the path to where the license files gets saved to
         /// </summary>
         ///<remarks>each publisher will have their own sub-dir under this folder, and their respective lic files will be saved there</remarks>
-        public static string DefaultLicFileRootDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "License-Management.com");
+        public static string DefaultLicFileRootDir { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "License-Management.com");
     }
 }

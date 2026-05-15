@@ -1,7 +1,7 @@
-using Hymma.Lm.EndUser;
+using LicenseManagement.EndUser;
 using Xunit;
 
-namespace Hymma.Lm.EndUser.Test
+namespace LicenseManagement.EndUser.Test
 {
     public class DeviceIdTests
     {

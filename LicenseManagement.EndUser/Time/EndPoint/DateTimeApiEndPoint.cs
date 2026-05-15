@@ -1,69 +1,26 @@
-using LicenseManagement.EndUser.Exceptions;
-using Newtonsoft.Json;
+using LicenseManagement.EndUser.Utilities;
 using System;
-using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LicenseManagement.EndUser.Time.EndPoint
 {
-    public class DateTimeApiEndPoint  
+    internal class DateTimeApiEndPoint
     {
-        private const string DateTime = "DateTime";
-        private string _apiKey;
+        private const string Path = "DateTime";
+        private readonly string _apiKey;
 
-        public DateTimeApiEndPoint(string apiKey)
+        internal DateTimeApiEndPoint(string apiKey)
         {
             _apiKey = apiKey;
         }
 
-        /// <summary>
-        /// get current time from server
-        /// </summary>
-        /// <returns><see cref="DateTime.UtcNow"/> if there was internet connection or could parse server response</returns>
-        /// <exception cref="ApiException"></exception>
-        public DateTime GetCurrentUtcTime()
-        {
+        /// <summary>Gets current UTC time from server.</summary>
+        internal DateTime GetCurrentUtcTime()
+            => ApiHttp.SendJson<DateTime>(HttpMethod.Get, Path, _apiKey);
 
-            DateTime time;
-            using (var request = new AuthorizedRequest(HttpMethod.Get, DateTime,_apiKey))
-            {
-                using (var response = WebApiClient.HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead).GetAwaiter().GetResult())
-                {
-                    response.EnsureSuccessStatusCode();
-                    using (var stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult())
-                    {
-                        TextReader reader = new StreamReader(stream);
-                        time = JsonConvert.DeserializeObject<DateTime>(reader.ReadToEnd());
-
-                    }
-                }
-            }
-            return time;
-        }
-
-        /// <summary>
-        /// get current time from server
-        /// </summary>
-        /// <returns><see cref="DateTime.UtcNow"/> if there was internet connection or could parse server response</returns>
-        /// <exception cref="ApiException"></exception>
-        public async Task<DateTime> GetCurrentUtcTimeAsync()
-        {
-
-            DateTime time;
-            using (var request = new AuthorizedRequest(HttpMethod.Get, DateTime,_apiKey))
-            {
-                using (var response = await WebApiClient.HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead))
-                {
-                    response.EnsureSuccessStatusCode();
-                    using (var stream = await response.Content.ReadAsStreamAsync())
-                    {
-                        TextReader reader = new StreamReader(stream);
-                        time = JsonConvert.DeserializeObject<DateTime>(reader.ReadToEnd());
-                    }
-                }
-            }
-            return time;
-        }
+        internal Task<DateTime> GetCurrentUtcTimeAsync(CancellationToken cancellationToken = default(CancellationToken))
+            => ApiHttp.SendJsonAsync<DateTime>(HttpMethod.Get, Path, _apiKey, cancellationToken: cancellationToken);
     }
 }

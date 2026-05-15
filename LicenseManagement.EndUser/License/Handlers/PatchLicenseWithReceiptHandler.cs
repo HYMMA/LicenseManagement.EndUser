@@ -22,19 +22,19 @@ namespace LicenseManagement.EndUser.License.Handlers
 
         public override async Task HandleContextAsync(LicHandlingContext context)
         {
-            //var beforeEvent = context.LicenseModel.Receipt;
-            //context.RaiseOnCustomerMustEnterProductKey();
-
-            //if customer did change the receipt
-            //if (context.LicenseModel.Receipt != beforeEvent)
-            //{
             var apiClient = new LicenseApiEndPoint(context.PublisherPreferences.ApiKey);
             try
             {
-                var status = await apiClient.PatchLicenseAsync(GetModel(context));
+                var status = await apiClient.PatchLicenseAsync(GetModel(context)).ConfigureAwait(false);
                 if (status == System.Net.HttpStatusCode.NoContent)
                 {
                     SetNext(new ApiGetLicenseHandler());
+                }
+                else if (status == System.Net.HttpStatusCode.NotFound)
+                {
+                    // Server has rotated/deleted the license row. Re-POST creates a fresh license
+                    // for this computer/product instead of failing the chain.
+                    SetNext(new ApiPostLicenseHandler());
                 }
                 else
                 {
@@ -45,20 +45,11 @@ namespace LicenseManagement.EndUser.License.Handlers
             {
                 SetNextError(context, e);
             }
-            //}
-            //else
-            //{
-            //    SetNextError(context, new ReceiptCodeException());
-            //}
-            await nextHandler.HandleContextAsync(context);
+            await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
         }
 
         public override void HandleContext(LicHandlingContext context)
         {
-            //var beforeEvent = context.LicenseModel.Receipt;
-            //context.RaiseOnCustomerMustEnterProductKey();
-            //if (context.LicenseModel.Receipt != beforeEvent)
-            //{
             var apiClient = new LicenseApiEndPoint(context.PublisherPreferences.ApiKey);
             try
             {
@@ -68,6 +59,10 @@ namespace LicenseManagement.EndUser.License.Handlers
                 {
                     SetNext(new ApiGetLicenseHandler());
                 }
+                else if (status == System.Net.HttpStatusCode.NotFound)
+                {
+                    SetNext(new ApiPostLicenseHandler());
+                }
                 else
                 {
                     SetNextError(context, new CouldNotPatchLicenseWithReceiptException());
@@ -77,11 +72,6 @@ namespace LicenseManagement.EndUser.License.Handlers
             {
                 SetNextError(context, e);
             }
-            //}
-            /*else
-            {
-                SetNextError(context, new ReceiptCodeException());
-            }*/
             nextHandler.HandleContext(context);
         }
     }

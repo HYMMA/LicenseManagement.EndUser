@@ -1,7 +1,7 @@
-﻿using Hymma.Lm.EndUser.Models;
+﻿using LicenseManagement.EndUser.Models;
 using System.Data;
 
-namespace Hymma.Lm.EndUser.Test
+namespace LicenseManagement.EndUser.Test
 {
     internal static class ContextManager
     {
@@ -20,7 +20,6 @@ namespace Hymma.Lm.EndUser.Test
         {
             return new LicHandlingContext(new PublisherPreferences(publisher, productId, ApiKey)
             {
-                TrialDays = trial,
                 PublicKey = "<RSAKeyValue><Modulus>vE30e8HszHQbvKdejEwrGMiILh8E1wbciEdZxUVNrVM33WQCfxzdU5CtyviNm1837oCE3tetPq9nrtazSGXgCfiZY023pLdAaH6ExO3UeQv0hZBWJ4jPOhfUcFOGj4bkPH6EgaT4wjBVc+oRzXL00NxcIQTOFgWuqlBxnZ1NGSntdy8+AOiVaZ3tlV8iIO5J1pgt9NA1FS7Eh7icROJmJkDT/ZnfCn9PZdbBm/tT7LVaifi6rm+r1kPQ9Qp0jqX36pqYhES78Hs8nl5h/Ukfw+9J7KyWavey4NpYs1YqXGfKDYvVr1cJiwvsvh8h/rsFj/f/GhLfa9OwbH2bU/ZFrQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>",
                 ValidDays = validDays
             });

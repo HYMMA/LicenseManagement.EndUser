@@ -44,14 +44,22 @@ namespace LicenseManagement.EndUser.Product.Handlers
         {
             try
             {
-                //update product model from db
-                var _apiClient = new ProductApiEndPoint(context.PublisherPreferences.ApiKey);
-                context.LicenseModel.Product = await _apiClient
+                var apiClient = new ProductApiEndPoint(context.PublisherPreferences.ApiKey);
+                var product = await apiClient
                     .GetProductAsync(context.PublisherPreferences.ProductId)
                     .ConfigureAwait(false);
 
-                //next get the license
-                SetNext(new ApiPostLicenseHandler());
+                if (product is null)
+                {
+                    SetNextError(context, new Exceptions.ApiException(
+                        $"no such product {context.PublisherPreferences.ProductId}",
+                        System.Net.HttpStatusCode.NotFound));
+                }
+                else
+                {
+                    context.LicenseModel.Product = product;
+                    SetNext(new ApiPostLicenseHandler());
+                }
             }
             catch (HttpRequestException ex)
             {
@@ -61,7 +69,7 @@ namespace LicenseManagement.EndUser.Product.Handlers
             {
                 SetNextError(context, e);
             }
-            await nextHandler.HandleContextAsync(context);
+            await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
         }
     }
 }

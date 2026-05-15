@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace LicenseManagement.EndUser
 {
-    public abstract class LicenseValidationHandler
+    internal abstract class LicenseValidationHandler
     {
         protected LicenseValidationHandler nextHandler;
-        protected void SetNext(LicenseValidationHandler hander) => nextHandler = hander;
+        protected void SetNext(LicenseValidationHandler handler) => nextHandler = handler;
         //public abstract Task HandleAsync();
         public abstract Task HandleContextAsync(LicHandlingContext context);
         public abstract void HandleContext(LicHandlingContext context);

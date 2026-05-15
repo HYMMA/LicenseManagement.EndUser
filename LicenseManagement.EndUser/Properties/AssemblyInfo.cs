@@ -31,5 +31,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.0.0")]
+
+// Test project is signed with the same HymmaLm.snk so it can access internals (the *ApiEndPoint
+// classes, the chain handlers, etc.). Public key extracted with `sn -p HymmaLm.snk` then dumped as hex.
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("LicenseManagement.EndUser.Test, PublicKey=002400000480000094000000060200000024000052534131000400000100010021594b6aa734266e5c22ad9d296a65fc99154cd4c4296828a3f2d8652fb76dac1ca60962ae6b16bf01fb3b173d85d1073d5ac9dcf40bb717d1b18786edc902f842b2be8897fd0704778d60e2fe618aef579fad24bbdedfeea92b09a200729512f6716cf8341355efbecd9f26b65e59f31f2aa19627b60ead56faca79b0d738bd")]

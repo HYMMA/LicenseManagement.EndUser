@@ -59,18 +59,16 @@ namespace LicenseManagement.EndUser.License.Handlers
 
         public override void HandleContext(LicHandlingContext context)
         {
-            //we only need to write license onto file, if it's new
             SetNextHandler(context);
             if (nextHandler != null)
-                nextHandler?.HandleContext(context);
+                nextHandler.HandleContext(context);
         }
 
         public override async Task HandleContextAsync(LicHandlingContext context)
         {
             SetNextHandler(context);
             if (nextHandler != null)
-                await nextHandler.HandleContextAsync(context);
-
+                await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
         }
     }
 }

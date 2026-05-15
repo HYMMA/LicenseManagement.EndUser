@@ -19,7 +19,7 @@ namespace LicenseManagement.EndUser
             try
             {
                 //update context computer model from db
-                var _apiClient = new ComputerApiEndPoint(context.PublisherPreferences.ApiKey.ToString());
+                var _apiClient = new ComputerApiEndPoint(context.PublisherPreferences.ApiKey);
                 context.LicenseModel.Computer = _apiClient
                     .GetComputer();
 
@@ -39,7 +39,7 @@ namespace LicenseManagement.EndUser
             try
             {
                 //update context computer model from db
-                var _apiClient = new ComputerApiEndPoint(context.PublisherPreferences.ApiKey.ToString());
+                var _apiClient = new ComputerApiEndPoint(context.PublisherPreferences.ApiKey);
                 context.LicenseModel.Computer = await _apiClient
                     .GetComputerAsync()
                     .ConfigureAwait(false);

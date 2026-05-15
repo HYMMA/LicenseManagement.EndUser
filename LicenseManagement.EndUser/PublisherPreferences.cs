@@ -98,5 +98,26 @@ namespace LicenseManagement.EndUser
             BeforeLicensePost?.Invoke(this, args);
             return args.Metadata;
         }
+
+        /// <summary>
+        /// Returns a string representation that masks the <see cref="ApiKey"/> (only the last 4 chars are visible).
+        /// </summary>
+        /// <remarks>
+        /// This override exists specifically to prevent reflexive logging in WiX custom actions
+        /// (e.g. <c>session.Log("{0}", preferences)</c>) from leaking the full API key into MSI verbose logs.
+        /// If you need to log the API key explicitly, do so deliberately and ensure the consumer marks
+        /// the property as MsiHidden.
+        /// </remarks>
+        public override string ToString()
+        {
+            return $"PublisherPreferences {{ VendorId={VendorId}, ProductId={ProductId}, ValidDays={ValidDays}, ApiKey={MaskApiKey(ApiKey)} }}";
+        }
+
+        internal static string MaskApiKey(string apiKey)
+        {
+            if (string.IsNullOrEmpty(apiKey)) return "(none)";
+            if (apiKey.Length <= 4) return new string('*', apiKey.Length);
+            return new string('*', apiKey.Length - 4) + apiKey.Substring(apiKey.Length - 4);
+        }
     }
 }

@@ -67,7 +67,7 @@ namespace LicenseManagement.EndUser.License.Handlers
                 //call api end point
                 var apiClient = new LicenseApiEndPoint(context.PublisherPreferences.ApiKey);
 
-                var response = await apiClient.PostLicenseAsync(GetModel(context));
+                var response = await apiClient.PostLicenseAsync(GetModel(context)).ConfigureAwait(false);
 
                 //if license existed or we created it
                 if (response == HttpStatusCode.Created || response == HttpStatusCode.Conflict)
@@ -84,7 +84,7 @@ namespace LicenseManagement.EndUser.License.Handlers
             {
                 SetNextError(context, e);
             }
-            await nextHandler.HandleContextAsync(context);
+            await nextHandler.HandleContextAsync(context).ConfigureAwait(false);
         }
     }
 }
