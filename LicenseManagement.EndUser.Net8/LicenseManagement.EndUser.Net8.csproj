@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    net8.0-windows build of LicenseManagement.EndUser.
+
+    This is a SIBLING project that LINKS the exact same source files as the original
+    net4.8.1 project (..\LicenseManagement.EndUser). It does NOT replace that project —
+    the net481 assembly (consumed by the SolidWorks add-in) is built unchanged by the
+    original csproj + ILRepack. This project only adds a net8.0-windows asset to the
+    same NuGet package so the .NET 8 Inventor add-in can consume it.
+
+    The few net4.8-only APIs are handled without changing runtime logic:
+      - WebApiClient.cs swaps the net45-only PerHostHttpClientFactory for a plain pooled
+        HttpClient under #if NET8_0_OR_GREATER (net481 path untouched).
+      - System.Management and System.Security.Cryptography.Xml are BCL on net481 but
+        NuGet packages on net8 — referenced below.
+      - DeviceId* were ILRepack-merged on net481; on net8 they are normal package deps.
+      - Properties\Resources.resx/.Designer.cs are excluded (no code reads any resource,
+        and the resx carries System.Drawing-typed entries we don't want to drag in).
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <AssemblyName>LicenseManagement.EndUser</AssemblyName>
+    <RootNamespace>LicenseManagement.EndUser</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\LicenseManagement.EndUser\HymmaLm.snk</AssemblyOriginatorKeyFile>
+    <!-- CA1416: the SDK is Windows-only by design (registry + WMI). SYSLIB0051: the
+         legacy serialization ctors on the exception types are kept for compatibility
+         with the net481 build. Both are intentional and identical to the net481 source. -->
+    <NoWarn>$(NoWarn);CA1416;SYSLIB0051</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\LicenseManagement.EndUser\**\*.cs"
+             Exclude="..\LicenseManagement.EndUser\bin\**\*.cs;..\LicenseManagement.EndUser\obj\**\*.cs;..\LicenseManagement.EndUser\Properties\Resources.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DeviceId" Version="6.9.0" />
+    <PackageReference Include="DeviceId.Windows" Version="6.9.0" />
+    <PackageReference Include="DeviceId.Windows.Wmi" Version="6.9.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- 9.0.x ships net8.0 assets; pinned to match DeviceId.Windows.Wmi's floor (>=9.0.3)
+         and to avoid the known advisories in System.Security.Cryptography.Xml 8.0.2. -->
+    <PackageReference Include="System.Management" Version="9.0.17" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.17" />
+  </ItemGroup>
+
+</Project>

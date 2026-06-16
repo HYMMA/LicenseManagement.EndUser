@@ -2,7 +2,7 @@
 <package>
 	<metadata minClientVersion="2.5">
 		<id>LicenseManagement.EndUser</id>
-		<version>3.0.2</version>
+		<version>3.1.0</version>
 		<authors>HYMMA</authors>
 		<owners>HYMMA</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -20,11 +20,21 @@
 				<dependency id="System.Memory" version="4.5.0" />
 				<dependency id="System.Threading.Tasks.Extensions" version="4.5.2" />
 			</group>
+			<group targetFramework="net8.0-windows7.0">
+				<dependency id="DeviceId" version="6.9.0" />
+				<dependency id="DeviceId.Windows" version="6.9.0" />
+				<dependency id="DeviceId.Windows.Wmi" version="6.9.0" />
+				<dependency id="Newtonsoft.Json" version="13.0.3" />
+				<dependency id="System.Management" version="9.0.17" />
+				<dependency id="System.Security.Cryptography.Xml" version="9.0.17" />
+			</group>
 		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\README.md" target="" />
 		<file src="bin\Release\LicenseManagement.EndUser.dll" target="lib\net481" />
 		<file src="bin\Release\LicenseManagement.EndUser.pdb" target="lib\net481" />
+		<file src="..\LicenseManagement.EndUser.Net8\bin\Release\net8.0-windows\LicenseManagement.EndUser.dll" target="lib\net8.0-windows7.0" />
+		<file src="..\LicenseManagement.EndUser.Net8\bin\Release\net8.0-windows\LicenseManagement.EndUser.pdb" target="lib\net8.0-windows7.0" />
 	</files>
 </package>

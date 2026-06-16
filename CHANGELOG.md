@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-06-16
+
+### Added
+- **net8.0-windows target.** The package now ships `lib/net8.0-windows7.0` alongside the
+  existing `lib/net481`, so .NET 8 desktop hosts (e.g. the CadShift for Inventor add-in)
+  can consume the SDK directly. Built by a sibling project
+  (`LicenseManagement.EndUser.Net8`) that links the exact same sources — there is **no
+  change to the net481 assembly** the existing SolidWorks add-in depends on.
+
+### Internal
+- `WebApiClient` selects a plain pooled `HttpClient` on net8 (the built-in
+  `SocketsHttpHandler` already pools per host) via `#if NET8_0_OR_GREATER`; the net481
+  path still uses `PerHostHttpClientFactory` unchanged. No behavioural difference.
+- On net8, `System.Management` and `System.Security.Cryptography.Xml` (BCL on net481) are
+  referenced as packages; `DeviceId*` are package references instead of ILRepack-merged.
+  The net481 build remains ILRepack-merged exactly as before.
+
 ## [3.0.2] - 2026-05-15
 
 ### Fixed

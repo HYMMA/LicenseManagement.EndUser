@@ -1,4 +1,6 @@
+#if !NET8_0_OR_GREATER
 using HttpClientFactory.Impl;
+#endif
 using System;
 using System.Net.Http;
 
@@ -23,8 +25,16 @@ namespace LicenseManagement.EndUser
         private static HttpClient BuildClient()
         {
             var baseAddress = LicenseHandlingOptions.ServerBaseAddress ?? Constants.BaseAddress;
+#if NET8_0_OR_GREATER
+            // On .NET 8 the built-in SocketsHttpHandler pools connections, and this static
+            // Lazy already yields a single shared HttpClient — the recommended pattern — so
+            // the net45-only PerHostHttpClientFactory (which can't load on .NET 8) is not
+            // needed. Behaviour is identical: one pooled client with the base address set.
+            var client = new HttpClient { BaseAddress = new Uri(baseAddress) };
+#else
             var client = new PerHostHttpClientFactory().GetHttpClient(baseAddress);
             client.BaseAddress = new Uri(baseAddress);
+#endif
             return client;
         }
     }
