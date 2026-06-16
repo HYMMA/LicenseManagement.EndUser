@@ -26,11 +26,14 @@ namespace LicenseManagement.EndUser
         {
             var baseAddress = LicenseHandlingOptions.ServerBaseAddress ?? Constants.BaseAddress;
 #if NET8_0_OR_GREATER
-            // On .NET 8 the built-in SocketsHttpHandler pools connections, and this static
-            // Lazy already yields a single shared HttpClient — the recommended pattern — so
-            // the net45-only PerHostHttpClientFactory (which can't load on .NET 8) is not
-            // needed. Behaviour is identical: one pooled client with the base address set.
-            var client = new HttpClient { BaseAddress = new Uri(baseAddress) };
+            // On .NET 8 the net45-only PerHostHttpClientFactory can't load, so we build the
+            // client directly. PooledConnectionLifetime recycles pooled connections (and so
+            // re-resolves DNS) periodically — the modern, built-in equivalent of the net481
+            // factory's connection-lease recycle. Without it this long-lived, process-wide
+            // Lazy<HttpClient> would pin connections to the first resolved IP forever, so a
+            // server IP/failover change would break license checks until the host restarts.
+            var handler = new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(2) };
+            var client = new HttpClient(handler) { BaseAddress = new Uri(baseAddress) };
 #else
             var client = new PerHostHttpClientFactory().GetHttpClient(baseAddress);
             client.BaseAddress = new Uri(baseAddress);

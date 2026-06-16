@@ -58,16 +58,32 @@ namespace LicenseManagement.EndUser.Signature.Handlers
         {
             // Refuse plain HTTP for the public-key fetch. This is the trust root for license
             // signature validation — if it travels over plain HTTP, a network attacker can
-            // swap in their own key and get the SDK to accept arbitrary licenses.
-            if (!Constants.BaseAddress.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            // swap in their own key and get the SDK to accept arbitrary licenses. Guard the
+            // address actually used (LicenseHandlingOptions.ServerBaseAddress, which the HTTP
+            // layer reads) — not just the compile-time constant. http is allowed ONLY for a
+            // loopback host, so the local test/dev server (http://localhost:7298) still works
+            // while a misconfigured non-local http endpoint is rejected.
+            var effective = LicenseHandlingOptions.ServerBaseAddress ?? Constants.BaseAddress;
+            if (!IsSecureOrLoopback(effective))
             {
                 throw new CryptographicException(
-                    "Refusing to fetch the license-signing public key over a non-https endpoint. " +
-                    "Set Constants.BaseAddress to an https URL.");
+                    "Refusing to fetch the license-signing public key over a non-https, non-loopback endpoint. " +
+                    "Use an https URL (http is permitted only for localhost during testing).");
             }
 
             var client = new SignatureApiEndPoint(context.PublisherPreferences.ApiKey);
             context.PublisherPreferences.PublicKey = client.GetPublicKey();
+        }
+
+        // https is always accepted; http only when the host is loopback (localhost / 127.0.0.1 /
+        // ::1), the test/dev case. Anything else (non-https, non-loopback) is refused.
+        private static bool IsSecureOrLoopback(string baseAddress)
+        {
+            if (!Uri.TryCreate(baseAddress, UriKind.Absolute, out var uri))
+                return false;
+            if (uri.Scheme == Uri.UriSchemeHttps)
+                return true;
+            return uri.Scheme == Uri.UriSchemeHttp && uri.IsLoopback;
         }
 
         void SetNextHandler(LicHandlingContext context)

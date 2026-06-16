@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2026-06-17
+
+### Fixed
+- **net8 `WebApiClient` DNS staleness.** The net8.0-windows client now uses a
+  `SocketsHttpHandler` with `PooledConnectionLifetime = 2 min`, so a long-lived,
+  process-wide client re-resolves DNS periodically (matching the net481 factory's
+  connection-lease recycle). Previously it pinned connections to the first resolved
+  IP for the life of the process — a server IP/failover change broke license checks
+  until the host restarted. net481 path unchanged.
+- **HTTPS guard now checks the address actually used.** The public-key fetch guard
+  validated the compile-time `Constants.BaseAddress` (always https) rather than the
+  effective `LicenseHandlingOptions.ServerBaseAddress` used by the HTTP layer. It now
+  guards the effective address and permits http only for a loopback host, so the
+  local test/dev server still works while a misconfigured non-local http endpoint is
+  refused (the public key is the signature trust root).
+
 ## [3.1.0] - 2026-06-16
 
 ### Added
