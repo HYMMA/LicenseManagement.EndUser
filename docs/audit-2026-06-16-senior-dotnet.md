@@ -1,0 +1,51 @@
+# Senior .NET Audit — LicenseManagement.EndUser net8 target (work of 2026-06-16)
+
+## Scope
+
+This audit covers commit range `6ca140e..HEAD` (3 commits: `543f93b` test idempotency fix, `65262ca` two uninstall regression tests, `bd4ddec` "Add net8.0-windows target via sibling project"). The change ships `lib/net8.0-windows7.0` alongside the unchanged `lib/net481` by adding a sibling SDK project (`LicenseManagement.EndUser.Net8`) that **links the same source files** as the original net4.8.1 project, so the net481 assembly consumed by the shipping SolidWorks add-in is untouched. Reviewed through five lenses — clean-code, security-review, exception-leakage-tracer, external-integrations-review, and a build/packaging-divergence lens — concentrating on the HttpClient lifetime swap, the genuineness of the "net481 unchanged" claim, dependency-version correctness for the signature-validation stack, strong-naming, and linked-source divergence risk. Source files were read in full; no build or live call was run. Net-net: the change is well-executed and the net481-unchanged claim holds; the findings below are mostly pre-existing code now newly shipped to a second runtime, plus two packaging/runtime hardening items.
+
+---
+
+## Critical
+
+_None._
+
+## High
+
+- **`LicenseManagement.EndUser/Signature/Handlers/LicenseSignatureValidationHandler.cs:62` — trust-root key can be fetched over plain HTTP.** The HTTPS guard validates the compile-time constant `Constants.BaseAddress` (always `https://`), but the actual public-key fetch flows through `SignatureApiEndPoint.GetPublicKey` → `ApiHttp` → `WebApiClient` (`WebApiClient.cs:27`), which uses the **overridable** `LicenseHandlingOptions.ServerBaseAddress`. A consumer that sets `ServerBaseAddress` to an `http://` URL passes the guard yet retrieves the signature trust root over plaintext, enabling a network attacker to substitute a key and get arbitrary licenses accepted. This is pre-existing and shared by both TFMs, but the net8 target newly ships it. **Fix:** guard `LicenseHandlingOptions.ServerBaseAddress ?? Constants.BaseAddress` with `StringComparison.OrdinalIgnoreCase`, not the const. (Confirmed not currently exploitable on default config, but it is a one-line consumer mistake away.)
+
+## Medium
+
+- **`LicenseManagement.EndUser/HymmaLm.snk` — private signing key committed to the repo.** `git ls-files` confirms the strong-name key is tracked. Strong-naming gives identity, not tamper-proofing, but anyone with repo access can reproduce the assembly identity. The net8 csproj newly references the same key (`LicenseManagement.EndUser.Net8.csproj:33`), so both TFMs share it. **Fix:** rotate the key, purge it from history, and inject it via a CI secret (or delay-sign). Not a regression introduced by this diff, but in scope because the new project consumes it.
+- **`LicenseManagement.EndUser/WebApiClient.cs:33` — net8 client never refreshes DNS** _(flagged by both security-review and external-integrations)_. The net8 `new HttpClient { BaseAddress }` uses the default `SocketsHttpHandler` with `PooledConnectionLifetime = Infinite`. A CAD host (SolidWorks/Inventor) that stays open for days will pin connections to `license-management.com` and never observe an IP rotation/failover. **Fix:** `new HttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(5) }) { BaseAddress = … }` inside the `#if NET8_0_OR_GREATER` block.
+- **`LicenseManagement.EndUser/Signature/Handlers/LicenseSignatureValidationHandler.cs:119` — bare `catch` lumps tamper-while-online into the "server unreachable" refetch path.** Reachable types from the try: `CryptographicException` (https guard, `RSA.FromXmlString`, `CheckSignature`), `XmlException`/`InvalidOperationException` (`LoadXml` on tampered XML), and `InvalidApiKeyException`/`NetworkUnavailableException`/`ApiException` from `ApiHttp`. **Security verdict: tamper is NOT masked** — the fallback `ApiGetLicenseHandler` re-fetches with `IsLicenseFreshOutOfServer == true` and re-runs signature validation, throwing `CryptographicException` (line 99) if the fresh server license fails. Still, the catch is wider than its comment ("Can't reach server") claims. **Fix:** narrow to `catch (NetworkUnavailableException)` / `catch (HttpRequestException)` for the refetch fallback and let `CryptographicException`/`XmlException` propagate via `SetNextError`.
+
+## Low
+
+- **`System.Security.Cryptography.Xml` 9.0.17 — verify, don't trust the comment.** This is the load-bearing dependency for `CheckSignature`. The 8.0.x line carried a published signature-processing DoS advisory (CVE-2024-43485 / `NodeRecursion` class) fixed in 8.0.3 servicing; 9.0.17 is well past that fix and is a correct, non-vulnerable choice — the csproj rationale (`LicenseManagement.EndUser.Net8.csproj:50-52`) is sound. The exact GHSA could not be certified from static knowledge. **Action:** confirm via `dotnet list package --vulnerable --include-transitive` before publish rather than relying on the comment. `System.Management` 9.0.17 has no relevant advisory.
+- **`LicenseManagement.EndUser/Signature/Handlers/LicenseSignatureValidationHandler.cs:124` — empty `catch {}` around `LicenseModel.FromXml(context.SignedLicense)`.** Pre-populates `LicenseModel` from *unverified* XML, but `ApiGetLicenseHandler` immediately overwrites it with the re-fetched, re-validated license, so it is harmless dead-ish defensive code. Swallows `XmlException`/`InvalidOperationException`/`ArgumentNullException`. **Fix:** drop the line, or `catch (Exception ex)` and log.
+- **`nugetSpec.nuspec:24-26` (+ `LicenseManagement.EndUser.Net8.csproj:46-48`) — `DeviceId*` are public deps on net8, internalized on net481.** The net481 build ILRepack `/internalize`-merges DeviceId/DeviceId.Windows/DeviceId.Windows.Wmi/PlatformAbstractions (absent from the net481 nuspec group), but the net8 asset exposes DeviceId 6.9.0 and its tree as public transitive dependencies. This does not affect net481 and is deliberate, but widens the net8 consumer's supply-chain closure. **Fix:** none required; mention in release notes.
+- **`LicenseManagement.EndUser.Test/Tests/LicenseStrategyTests.cs:377-378, 414-415` (+ `ApiEndPointTests.cs:58-59`) — duplicated GUID→MAC block in three tests.** **Fix:** extract one `static string RandomMac()` test helper.
+- **`LicenseManagement.EndUser.Test/Tests/LicenseStrategyTests.cs:403` — `catch (HttpRequestException) {}` cannot distinguish 404 from 500/401.** `GetStringAsync` throws on any non-2xx, so a server error leaves `licBXml == null` and trips the later `Assert.NotNull` — no false *pass* (safe direction), but the assertion message can mislabel an unrelated failure as "hardware ID not used." **Fix:** assert `ex.StatusCode == HttpStatusCode.NotFound`.
+
+## Nit
+
+- **`LicenseManagement.EndUser.Test/Tests/LicenseStrategyTests.cs:368, 410` — both new test methods run ~40 lines** (over the ~30 guideline) due to inline computer POST+GET plumbing. Moving "create fresh computer on server" into a `testServer` helper would shrink both and remove more duplication.
+
+---
+
+## Dismissed false-positives
+
+- **"net481 behavior changed."** Verified false. The only change inside the net481 source tree is the `#if !NET8_0_OR_GREATER` guard in `WebApiClient.cs`; the net481 `.csproj` explicit `<Compile>` list and both ILRepack targets are byte-identical, and the net481 nuspec dependency group is unchanged.
+- **"Linked-source globs could diverge the two TFMs."** Verified false. All 77 non-excluded `*.cs` files under the original folder map 1:1 to the explicit `<Compile>` list; `Properties\Resources.Designer.cs` is intentionally excluded on net8, and `AssemblyInfo.cs` is handled by `GenerateAssemblyInfo=false` to avoid duplicate attributes. The glob's auto-pickup of future files is the safer divergence direction.
+- **"net8 HttpClient has the 100s default timeout."** False. The net8 path uses the same `ApiHttp` per-request linked-CTS timeout (`ApiHttp.cs:146`, default 15s) and deliberately never sets `HttpClient.Timeout` (documented at `WebApiClient.cs:13-18`).
+- **"Create POST could double-charge/duplicate on retry."** False. The license-creating POST passes a stable `Idempotency-Key` (`license:{computer}:{product}`, `LicenseApiEndPoint.cs:26/29/61`) into the retried path (`ApiHttp.cs:225-226`).
+- **"Secrets leak into logs / query string."** False. The API key travels in the `X-API-KEY` header (`AuthorizedRequest.cs:13`) and is masked to last-4 in logs (`ApiHttp.cs:335/338`).
+- **"Version mismatch between csproj and nuspec."** False. Every net8 `<PackageReference>` matches its nuspec `<dependency>` exactly; nuspec src path (`bin\Release\net8.0-windows\`) matches the default output path; CI builds both DLLs before `nuget pack`; both TFMs sign with the same `HymmaLm.snk` (identical public-key token).
+- **`AuthorizedRequest.cs` `ServicePointManager` TLS bootstrap** is a harmless no-op on net8 and correct on net481 — not a finding.
+
+---
+
+## Overall assessment
+
+This is a clean, well-reasoned multi-targeting change. The sibling-project-with-linked-sources approach is the right way to add a net8.0-windows asset without disturbing the net481 assembly the SolidWorks add-in depends on, and that "no change to net481" claim was independently verified at the csproj, compile-list, ILRepack, and nuspec levels. Packaging is correct end-to-end (versions, output paths, CI ordering, strong-name identity), and the previously hardened HTTP layer — per-request timeouts, retry/backoff with Retry-After, idempotency keys, masked-secret logging, XXE-safe signature validation — carries over to the new runtime unchanged. None of the lenses found a Critical issue. The one item worth fixing before relying on the net8 asset in a long-lived host is the missing `PooledConnectionLifetime` (DNS staleness). The High HTTPS-guard gap and the committed `.snk` are pre-existing security weaknesses that this diff merely re-ships to a second TFM; both are cheap to fix and worth scheduling, the former because it concerns the signature trust root. Recommend: address the `PooledConnectionLifetime` and HTTPS-guard items, run `dotnet list package --vulnerable` to confirm the crypto dependency, and ship.
