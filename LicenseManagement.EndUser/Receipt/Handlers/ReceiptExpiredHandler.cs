@@ -23,11 +23,17 @@ namespace LicenseManagement.EndUser.Receipt.Handlers
             //make sure this is the latest state of the license
             if (context.IsLicenseFreshOutOfServer)
             {
-                //receipt is not null when it is expired, it is null when it is unregistered
-                var oldCode = context.LicenseModel.Receipt.Code;
+                // The receipt code is no longer carried in the signed license file (it is redacted /
+                // removed on the server), so Receipt may be null and there is nothing on-file to
+                // compare against. Prompt for a (renewed) code and re-patch only if the user actually
+                // enters one that differs from what we had; otherwise keep the current license. Using
+                // Receipt?.Code keeps this null-safe whether or not the file still carries a receipt.
+                var oldCode = context.LicenseModel.Receipt?.Code;
                 context.RaiseOnCustomerMustEnterProductKey();
+                var newCode = context.LicenseModel.Receipt?.Code;
 
-                if (string.Equals(oldCode, context.LicenseModel.Receipt.Code, System.StringComparison.OrdinalIgnoreCase))
+                if (string.IsNullOrEmpty(newCode)
+                    || string.Equals(oldCode, newCode, System.StringComparison.OrdinalIgnoreCase))
                 {
                     SetNext(new LastLicenseHandler());
                 }
