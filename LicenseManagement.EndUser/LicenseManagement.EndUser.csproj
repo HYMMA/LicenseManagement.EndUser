@@ -95,6 +95,7 @@
     <Compile Include="Exceptions\ReceiptNotAvailableException.cs" />
     <Compile Include="LicenseHandlingOptions.cs" />
     <Compile Include="LicenseValidationHandler.cs" />
+    <Compile Include="License\CompactLicense.cs" />
     <Compile Include="License\Handlers\TimeSyncDiagnostic.cs" />
     <Compile Include="License\Handlers\ValidLicenseHandler.cs" />
     <Compile Include="License\Handlers\UnregisterReceiptHandler.cs" />

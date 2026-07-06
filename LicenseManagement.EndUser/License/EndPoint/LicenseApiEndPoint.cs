@@ -40,7 +40,16 @@ namespace LicenseManagement.EndUser.License.EndPoint
         internal Task<string> GetLicenseAsync(string computer, string product, List<string> features, uint validDays, CancellationToken cancellationToken = default(CancellationToken))
             => ApiHttp.GetStringAsync(BuildGetPath(computer, product, features, validDays), _apiKey, cancellationToken);
 
-        private static string BuildGetPath(string computer, string product, List<string> features, uint validDays)
+        // Compact signed license (JWS: jws / es256 / eddsa) for embedded / non-.NET
+        // consumers. Same endpoint as the XML license with an added &format= — the XML
+        // path above is untouched.
+        internal string GetCompactLicense(string computer, string product, string format, uint validDays)
+            => ApiHttp.GetString(BuildGetPath(computer, product, null, validDays, format), _apiKey);
+
+        internal Task<string> GetCompactLicenseAsync(string computer, string product, string format, uint validDays, CancellationToken cancellationToken = default(CancellationToken))
+            => ApiHttp.GetStringAsync(BuildGetPath(computer, product, null, validDays, format), _apiKey, cancellationToken);
+
+        private static string BuildGetPath(string computer, string product, List<string> features, uint validDays, string format = null)
         {
             var endPoint = new Uri(WebApiClient.HttpClient.BaseAddress, Path);
             var collection = new List<KeyValuePair<string, string>>
@@ -54,6 +63,8 @@ namespace LicenseManagement.EndUser.License.EndPoint
                 foreach (var feature in features)
                     collection.Add(new KeyValuePair<string, string>("features", feature));
             }
+            if (!string.IsNullOrEmpty(format))
+                collection.Add(new KeyValuePair<string, string>("format", format));
             return endPoint.WithQueryString(collection);
         }
 
