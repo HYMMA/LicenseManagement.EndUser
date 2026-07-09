@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-07-09
+
+### Added
+- **Compact license formats for embedded consumers.** New
+  `CompactLicense.FetchAsync(apiKey, computerId, productId, format, validDays, ct)`
+  and `LicenseApiEndPoint.GetCompactLicense[Async]` fetch a compact signed token in
+  `jws`, `es256`, or `eddsa` format (via the API `?format=` parameter), for hosts that
+  verify a signed token offline (e.g. the CADshift nesting engine). The XML license
+  flow is unchanged and remains the default. Shipped on both `net481` and
+  `net8.0-windows7.0`.
+
+### Fixed
+- **Null-safe `ReceiptExpiredHandler`** for receipt-less license files — it no longer
+  throws when a license file has no attached receipt.
+
 ## [3.1.1] - 2026-06-17
 
 ### Fixed
