@@ -61,10 +61,20 @@ namespace LicenseManagement.EndUser
         private static string BuildGetPath()
         {
             var endPoint = new Uri(WebApiClient.HttpClient.BaseAddress, Path);
-            return endPoint.WithQueryString(new List<KeyValuePair<string, string>>
+            var query = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("macAddress", ComputerId.Instance.MachineId),
-            });
+                new KeyValuePair<string, string>("macAddress", ComputerId.Instance.EffectiveMachineId),
+            };
+            var legacy = ComputerId.Instance.LegacyMachineId;
+            if (legacy != null)
+            {
+                //the v1 id rides along so the server can re-key this machine's
+                //pre-v2 row (matched by name) to the v2 id instead of reporting
+                //the computer as unknown.
+                query.Add(new KeyValuePair<string, string>("legacyMacAddress", legacy));
+                query.Add(new KeyValuePair<string, string>("name", ComputerId.Instance.MachineName));
+            }
+            return endPoint.WithQueryString(query);
         }
 
         // Stable per (mac, name) pair so retries after a network blip don't create duplicate computer rows.

@@ -16,10 +16,16 @@ namespace LicenseManagement.EndUser.Computer.Handlers
         }
 
         string GetErrText(LicHandlingContext context) =>
-            $"computer id(s) do not match. {ComputerId.Instance.MachineId} and {context.LicenseModel.Computer.MacAddress}";
+            $"computer id(s) do not match. {ComputerId.Instance.EffectiveMachineId} (legacy {ComputerId.Instance.MachineId}) and {context.LicenseModel.Computer.MacAddress}";
 
         private bool IsNameValid(LicHandlingContext context)
-            => string.Equals(ComputerId.Instance.MachineId, context.LicenseModel.Computer.MacAddress, StringComparison.OrdinalIgnoreCase);
+        {
+            var inLicense = context.LicenseModel.Computer.MacAddress;
+            //license data in the wild may carry either the v2 id (MachineGuid) or
+            //the v1 id (ProcessorId+baseboard serial) — both identify this machine.
+            return string.Equals(ComputerId.Instance.EffectiveMachineId, inLicense, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(ComputerId.Instance.MachineId, inLicense, StringComparison.OrdinalIgnoreCase);
+        }
 
         private void SetNextHandler(LicHandlingContext context)
         {

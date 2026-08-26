@@ -18,5 +18,13 @@ namespace LicenseManagement.EndUser.Models
     {
         public string MacAddress { get; set; }
         public string Name { get; set; }
+
+        /// <summary>
+        /// the v1 device id when <see cref="MacAddress"/> carries the v2 id —
+        /// lets the server re-key this machine's pre-v2 row instead of
+        /// treating it as a brand-new computer. Null (and serialized as null)
+        /// when this client has no v2 id; the server treats null as absent.
+        /// </summary>
+        public string LegacyMacAddress { get; set; }
     }
 }

@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-08-26
+
+### Added
+- **Machine identity v2.** `ComputerId` now also fingerprints the per-install
+  Windows `MachineGuid` (`MachineIdV2`); `EffectiveMachineId` (v2 when
+  available, else v1) is what the client sends as `MacAddress`, with the v1
+  id riding along as `LegacyMacAddress` (POST body + GET query, plus `name`)
+  so the server can re-key this machine's existing Computer row instead of
+  minting a fresh trial. Fixes real-world collisions: the v1 sources
+  (`ProcessorId` + baseboard serial) are shared across unrelated machines —
+  same CPU model, placeholder OEM serials — which let one customer's brand-new
+  install adopt another customer's expired-trial row.
+- `ComputerIdValidatorHandler` accepts a license bound to either the v2 or the
+  legacy v1 id, so `.lic` files from the wild keep validating.
+- Byte-parity with `license-management-core`'s `hlm_machine_id_win_v2`
+  (verified against an independent registry+SHA256+Crockford oracle in
+  `DeviceIdTests`).
+
+### Notes
+- Requires the license server with legacy re-key support (deployed 2026-08-26);
+  against an older server a v2 client would register as a new computer.
+
 ## [3.2.0] - 2026-07-09
 
 ### Added

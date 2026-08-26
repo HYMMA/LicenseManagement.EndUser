@@ -29,7 +29,8 @@ namespace LicenseManagement.EndUser.Test.Server
             // Returns 201 (created) or 409 (already exists) — both are success states.
             HttpClient.PostAsJsonAsync("computer", new
             {
-                MacAddress = ComputerId.Instance.MachineId,
+                MacAddress = ComputerId.Instance.EffectiveMachineId,
+                LegacyMacAddress = ComputerId.Instance.LegacyMachineId,
                 Name = ComputerId.Instance.MachineName
             }).GetAwaiter().GetResult();
 

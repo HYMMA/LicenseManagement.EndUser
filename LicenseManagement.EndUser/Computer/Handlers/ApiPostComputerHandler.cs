@@ -25,7 +25,8 @@ namespace LicenseManagement.EndUser.Computer
                     .PostComputer(new Models.PostComputerModel()
                     {
                         Name = ComputerId.Instance.MachineName,
-                        MacAddress = ComputerId.Instance.MachineId
+                        MacAddress = ComputerId.Instance.EffectiveMachineId,
+                        LegacyMacAddress = ComputerId.Instance.LegacyMachineId
                     });
 
                 //if created a new one or if it already existed
@@ -36,7 +37,7 @@ namespace LicenseManagement.EndUser.Computer
                 }
                 else
                 {
-                    context.Exception = new ApiException($"Could not create new computer {ComputerId.Instance.MachineId} on db.", response);
+                    context.Exception = new ApiException($"Could not create new computer {ComputerId.Instance.EffectiveMachineId} on db.", response);
                     SetNext(new ErrorHandler());
                 }
             }
@@ -57,7 +58,8 @@ namespace LicenseManagement.EndUser.Computer
                     .PostComputerAsync(new Models.PostComputerModel()
                     {
                         Name = ComputerId.Instance.MachineName,
-                        MacAddress = ComputerId.Instance.MachineId
+                        MacAddress = ComputerId.Instance.EffectiveMachineId,
+                        LegacyMacAddress = ComputerId.Instance.LegacyMachineId
                     })
                     .ConfigureAwait(false);
 
@@ -69,7 +71,7 @@ namespace LicenseManagement.EndUser.Computer
                 }
                 else
                 {
-                    context.Exception = new ApiException($"Could not create new computer {ComputerId.Instance.MachineId} on db. ", response);
+                    context.Exception = new ApiException($"Could not create new computer {ComputerId.Instance.EffectiveMachineId} on db. ", response);
                     SetNext(new ErrorHandler());
                 }
             }

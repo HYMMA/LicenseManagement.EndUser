@@ -23,7 +23,7 @@ namespace LicenseManagement.EndUser
         {
 
             //write computer id (MacAddress) on computer registrar
-            if (ComputerRegister.TryWrite(ComputerId.Instance.MachineId))
+            if (ComputerRegister.TryWrite(ComputerId.Instance.EffectiveMachineId))
             {
                 NextHandler = (new ApiPostComputerHandler());
             }

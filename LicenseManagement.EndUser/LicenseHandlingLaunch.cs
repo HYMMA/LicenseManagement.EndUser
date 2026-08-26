@@ -66,7 +66,7 @@ namespace LicenseManagement.EndUser
             //if mac-address was explicitly provided 
             //or alternatively could be read form registry
             //in other words, if we somehow managed to get hold of MacAddress
-            if (!string.IsNullOrEmpty(ComputerId.Instance.MachineId))
+            if (!string.IsNullOrEmpty(ComputerId.Instance.EffectiveMachineId))
             {
                 if (LicenseRegister.TryRead(out string signedLic))
                 {
